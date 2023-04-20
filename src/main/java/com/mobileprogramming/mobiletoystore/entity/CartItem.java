@@ -1,5 +1,7 @@
 package com.mobileprogramming.mobiletoystore.entity;
 
+import java.io.Serializable;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,7 +25,7 @@ import lombok.NoArgsConstructor;
 @Component
 @Entity
 @Table(name = "CartItem")
-public class CartItem {
+public class CartItem implements Serializable{
 
 	public static final long serialVersionUID = 1L;
 	

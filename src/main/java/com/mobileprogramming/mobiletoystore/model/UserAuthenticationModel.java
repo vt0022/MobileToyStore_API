@@ -13,5 +13,5 @@ public class UserAuthenticationModel {
 
 	private String message;
 	
-	private UserModel userModel;	
+	private UserModel data;	
 }

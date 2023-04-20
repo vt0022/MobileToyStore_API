@@ -1,38 +1,24 @@
 package com.mobileprogramming.mobiletoystore.utility;
 
-import java.math.BigInteger;
 import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
 
 public class SHA512Hash {
 	public static String encryptThis(String input) {
+		StringBuilder sb = new StringBuilder();
 		try {
-			// getInstance() method is called with algorithm SHA-512
-			MessageDigest md = MessageDigest.getInstance("SHA-512");
-
-			// digest() method is called
-			// to calculate message digest of the input string
-			// returned as array of byte
-			byte[] messageDigest = md.digest(input.getBytes());
-
-			// Convert byte array into signum representation
-			BigInteger no = new BigInteger(1, messageDigest);
-
-			// Convert message digest into hex value
-			String hashtext = no.toString(16);
-
-			// Add preceding 0s to make it 32 bit
-			while (hashtext.length() < 32) {
-				hashtext = "0" + hashtext;
+			MessageDigest digest = MessageDigest.getInstance("SHA-512");
+			digest.update(input.getBytes());
+			byte[] byteData = digest.digest();
+			for (byte x : byteData) {
+				String str = Integer.toHexString(Byte.toUnsignedInt(x));
+				if (str.length() < 2) {
+					sb.append('0');
+				}
+				sb.append(str);
 			}
-
-			// return the HashText
-			return hashtext;
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
-
-		// For specifying wrong message digest algorithms
-		catch (NoSuchAlgorithmException e) {
-			throw new RuntimeException(e);
-		}
+		return sb.toString();
 	}
 }

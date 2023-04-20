@@ -1,5 +1,6 @@
 package com.mobileprogramming.mobiletoystore.entity;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 
 import jakarta.persistence.Entity;
@@ -26,7 +27,7 @@ import lombok.NoArgsConstructor;
 
 @Entity
 @Component
-public class Review {
+public class Review implements Serializable{
 	public static final long serialVersionUID = 1L;
 	
 	@Id

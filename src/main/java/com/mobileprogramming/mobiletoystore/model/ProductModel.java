@@ -2,7 +2,10 @@ package com.mobileprogramming.mobiletoystore.model;
 
 import org.springframework.web.multipart.MultipartFile;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.mobileprogramming.mobiletoystore.entity.Category;
 
 import lombok.AllArgsConstructor;
@@ -20,11 +23,14 @@ public class ProductModel {
 	
 	private String description;
 	
+	private int quantity;
+	
 	private long price;
 	
 	private String images;
 	
 	private MultipartFile imageFiles;
 	
-	private CategoryModel category;
+	//@JsonIgnore
+	private Category category;
 }

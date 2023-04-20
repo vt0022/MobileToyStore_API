@@ -1,5 +1,6 @@
 package com.mobileprogramming.mobiletoystore.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import jakarta.persistence.CascadeType;
@@ -24,7 +25,7 @@ import lombok.NoArgsConstructor;
 
 @Component
 @Entity
-public class Cart {
+public class Cart implements Serializable{
 	
 	public static final long serialVersionUID = 1L;
 	

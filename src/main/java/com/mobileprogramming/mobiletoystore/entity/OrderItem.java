@@ -1,5 +1,7 @@
 package com.mobileprogramming.mobiletoystore.entity;
 
+import java.io.Serializable;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -25,7 +27,7 @@ import lombok.NoArgsConstructor;
 @Component
 @Entity
 @Table(name = "OrderItem")
-public class OrderItem {
+public class OrderItem implements Serializable{
 
 	public static final long serialVersionUID = 1L;
 	

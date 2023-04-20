@@ -1,4 +1,4 @@
-package com.mobileprogramming.mobiletoystore.controller.customer;
+package com.mobileprogramming.mobiletoystore.controller;
 
 import java.sql.Timestamp;
 import java.util.List;
@@ -70,6 +70,8 @@ public class OrderController {
 			orderItem.setPrice(orderItem.getProduct().getPrice());
 			orderItem.setOrder(newOrder);
 			total += orderItem.getProduct().getPrice();
+			// Update quantity
+			orderItem.getProduct().setQuantity(orderItem.getProduct().getQuantity() - orderItem.getQuantity());
 		}
 		// Set status and total
 		// Shipping fee //

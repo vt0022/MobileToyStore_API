@@ -1,4 +1,4 @@
-package com.mobileprogramming.mobiletoystore.controller.customer;
+package com.mobileprogramming.mobiletoystore.controller;
 
 import java.sql.Timestamp;
 import java.util.List;

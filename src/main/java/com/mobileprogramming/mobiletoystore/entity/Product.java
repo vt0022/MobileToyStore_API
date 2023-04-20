@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.List;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 
 import org.springframework.stereotype.Component;
@@ -32,6 +33,9 @@ public class Product implements Serializable{
 	private String images;
 	
 	private boolean status;
+	
+	@Min(0)
+	private int quantity;
 	
 	private long price;
 	// Thiếu quantity

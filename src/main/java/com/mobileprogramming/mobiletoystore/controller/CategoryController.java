@@ -1,4 +1,4 @@
-package com.mobileprogramming.mobiletoystore.controller.customer;
+package com.mobileprogramming.mobiletoystore.controller;
 
 import java.util.List;
 import java.util.Optional;

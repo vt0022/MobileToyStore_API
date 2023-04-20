@@ -1,0 +1,7 @@
+1. Chú ý quy cách đặt tên -> dẫn đến lỗi khi mapping
+2. Không truy xuất được dữ liệu -> do trên / sai db
+3. Lỗi Hibernate -> chỉnh lại properites
+4. Lỗi JSON Bean Parse Map -> do vòng lặp tham chiếu và chuyển đổi JSON giữa các mối quan hệ.
+Ví dụ: gọi category trong product, mỗi category lại gọi product,...
+-> Nếu dùng Model thì loại bỏ cả 2 bên quan hệ
+-> Nếu dùng Entity thì 1 bên

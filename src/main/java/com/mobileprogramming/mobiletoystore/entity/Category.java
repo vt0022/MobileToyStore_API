@@ -1,11 +1,14 @@
 package com.mobileprogramming.mobiletoystore.entity;
 
+import java.io.Serializable;
 import java.util.List;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
 
 import org.springframework.stereotype.Component;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.*;
 
@@ -15,7 +18,7 @@ import lombok.*;
 
 @Component
 @Entity
-public class Category {
+public class Category implements Serializable {
 	
 	public static final long serialVersionUID = 1L;
 	
@@ -33,6 +36,7 @@ public class Category {
 	//@Column
 	private boolean status;
 	
+	@JsonIgnore
 	// One to many with Product
 	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
 	private List<Product> products;

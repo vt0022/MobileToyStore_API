@@ -1,4 +1,4 @@
-package com.mobileprogramming.mobiletoystore.controller.customer;
+package com.mobileprogramming.mobiletoystore.controller;
 
 import java.sql.Timestamp;
 import java.util.Optional;
@@ -20,6 +20,7 @@ import com.mobileprogramming.mobiletoystore.model.MessageModel;
 import com.mobileprogramming.mobiletoystore.model.UserAuthenticationModel;
 import com.mobileprogramming.mobiletoystore.model.UserModel;
 import com.mobileprogramming.mobiletoystore.service.IUserService;
+import com.mobileprogramming.mobiletoystore.utility.SHA512Hash;
 
 import lombok.ToString;
 
@@ -33,7 +34,7 @@ public class UserController {
 	@Autowired
 	IUserService userService;
 	
-	@GetMapping("/me")
+	@GetMapping("/me/{userID}")
 	public ResponseEntity<UserModel> getUserByID(@PathVariable int userID) {
 		Optional<User> user = userService.findById(userID);
 		if(user.isPresent()) {
@@ -43,22 +44,24 @@ public class UserController {
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);	
 	}
 	
-	@PostMapping("/login")
+	@PostMapping(path = "/login", consumes = "application/x-www-form-urlencoded")
 	public ResponseEntity<?> loginUser(@RequestParam String username, @RequestParam String password) {
-		Optional<User> user = userService.login(username, password);
+		password = SHA512Hash.encryptThis(password);
+		System.out.print(password);
+ 		Optional<User> user = userService.login(username, password);
 		if(user.isPresent()) {
 			UserModel userModel = modelMapper.map(user.get(), UserModel.class);
 			// Set message and data
 			UserAuthenticationModel userLogin = new UserAuthenticationModel();
 			userLogin.setMessage("Login successfully.");
-			userLogin.setUserModel(userModel);
+			userLogin.setData(userModel);
 			
 			return new ResponseEntity<>(userLogin, HttpStatus.OK);
 		}
-		return new ResponseEntity<>(new MessageModel("Invalid username or password."), HttpStatus.NO_CONTENT);	
+		return new ResponseEntity<>(new MessageModel("Invalid username or password."), HttpStatus.NOT_FOUND);	
 	}
 	
-	@PostMapping("/signup")
+	@PostMapping(path = "/signup",  consumes = "application/x-www-form-urlencoded")
 	public ResponseEntity<?> signupUser(@RequestParam(required = true) String username, 
 										@RequestParam(required = true) String password,
 										@RequestParam(required = true) String firstname,
@@ -73,12 +76,11 @@ public class UserController {
 		}
 		// Create a new user
 		User newUser = userService.signup(username, password, firstname, lastname, email, phone);
-		newUser = userService.save(newUser);
 		// Create a response model
 		UserAuthenticationModel newUserResponse = new UserAuthenticationModel();
 		newUserResponse.setMessage("Sign up successfully.");
 		// Map and set
-		newUserResponse.setUserModel(modelMapper.map(newUserResponse, UserModel.class));
+		newUserResponse.setData(modelMapper.map(newUser, UserModel.class));
 		return new ResponseEntity<>(newUserResponse, HttpStatus.OK);
 	}
 	

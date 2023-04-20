@@ -71,6 +71,7 @@ public class UserServiceImpl implements IUserService{
 		newUser.setUsername(username);
 		String hashedPassword = SHA512Hash.encryptThis(password.concat("lookout"));
 		newUser.setPassword(hashedPassword);
+		newUser.setFirstname(firstname);
 		newUser.setLastname(lastname);
 		newUser.setEmail(email);
 		newUser.setPhone(phone);
@@ -78,6 +79,12 @@ public class UserServiceImpl implements IUserService{
 		newUser.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 		newUser.setStatus(true);
 		newUser.setRole(true);
+		newUser = userRepository.save(newUser);
 		return newUser;
+	}
+	
+	@Override
+	public List<User>getUser() {
+		return userRepository.findUser();
 	}
 }

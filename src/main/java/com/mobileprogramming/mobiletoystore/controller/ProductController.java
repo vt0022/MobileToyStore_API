@@ -1,4 +1,4 @@
-package com.mobileprogramming.mobiletoystore.controller.customer;
+package com.mobileprogramming.mobiletoystore.controller;
 
 import java.util.List;
 import java.util.Optional;
@@ -29,14 +29,14 @@ public class ProductController {
 	@Autowired
 	IProductService productService;
 	
-	@GetMapping(value = {"/view/all", ""}) 
+	@GetMapping(value = {"/all", ""}) 
 	public ResponseEntity<?> listProducts() {
 		List<ProductModel> productModels = productService.findAll().stream().map(product -> modelMapper
 				.map(product, ProductModel.class)).collect(Collectors.toList());
 		return new ResponseEntity<>(productModels, HttpStatus.OK);
 	}
 	
-	@GetMapping("/view/{productID}")
+	@GetMapping("/{productID}")
 	public ResponseEntity<?> getProductsByID(@PathVariable int productID) {
 		Optional<Product> product = productService.findById(productID);
 		
@@ -48,7 +48,7 @@ public class ProductController {
 	}
 	
 	@GetMapping("/search")
-	public ResponseEntity<?> searchForProducts(@RequestParam(value = "searchString", required = false, defaultValue = "") String searchString){
+	public ResponseEntity<?> searchForProducts(@RequestParam(value = "q", required = false, defaultValue = "") String searchString){
 		List<Product> foundProducts = productService.searchForProducts(searchString);
 		List<ProductModel> gotProducts = modelMapper.map(foundProducts, new TypeToken<List<ProductModel>>(){}.getType());
 		return new ResponseEntity<>(gotProducts, HttpStatus.OK);

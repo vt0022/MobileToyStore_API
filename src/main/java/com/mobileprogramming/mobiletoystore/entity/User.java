@@ -1,5 +1,6 @@
 package com.mobileprogramming.mobiletoystore.entity;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 
@@ -11,6 +12,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
+import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotBlank;
@@ -27,9 +29,9 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 
-@Component
 @Entity
-public class User {
+@Component
+public class User implements Serializable{
 
 	public static final long serialVersionUID = 1L;
 	
@@ -37,7 +39,7 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int userID;
 	
-	@NotBlank
+	@NotBlank(message = "Không được để trống tên!")
 	private String firstname;
 
 	private String lastname;
@@ -66,7 +68,6 @@ public class User {
 	private String username;
 	
 	@NotBlank(message = "Không được để trống mật khẩu!")
-	@Length(min = 8, message = "Mật khẩu cần chứa ít nhất 8 ký tự!")
 	private String password;
 	
 	@NotNull

@@ -70,7 +70,4 @@ public class UserModel {
 	
 	@JsonView(UserModel.class)
 	private List<Order> orders;
-	
-	@JsonView(UserModel.class)
-	private List<User> users;
 }

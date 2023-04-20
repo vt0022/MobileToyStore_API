@@ -1,5 +1,6 @@
 package com.mobileprogramming.mobiletoystore.entity;
 
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
 import jakarta.persistence.Entity;
@@ -23,7 +24,7 @@ import lombok.NoArgsConstructor;
 
 @Component
 @Entity
-public class Order {
+public class Order implements Serializable{
 
 	public static final long serialVersionUID = 1L;
 	
