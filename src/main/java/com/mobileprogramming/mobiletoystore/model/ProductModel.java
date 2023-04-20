@@ -31,6 +31,5 @@ public class ProductModel {
 	
 	private MultipartFile imageFiles;
 	
-	//@JsonIgnore
-	private Category category;
+	private CategoryModel category;
 }

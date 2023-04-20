@@ -14,6 +14,8 @@ import jakarta.validation.constraints.NotNull;
 
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -53,7 +55,7 @@ public class Order implements Serializable{
 	@ManyToOne
 	@JoinColumn(name = "userID")
 	private User user;
-	
+
 	// One to many with OrderItem
 	@OneToMany(mappedBy = "order")
 	private List<OrderItem> orderItems;

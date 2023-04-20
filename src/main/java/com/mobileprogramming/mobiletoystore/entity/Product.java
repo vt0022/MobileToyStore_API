@@ -9,6 +9,8 @@ import jakarta.validation.constraints.NotBlank;
 
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.*;
 
 @Data
@@ -38,7 +40,7 @@ public class Product implements Serializable{
 	private int quantity;
 	
 	private long price;
-	// Thiếu quantity
+
 	// Many to one with Category
 	@ManyToOne
 	@JoinColumn(name = "categoryID")

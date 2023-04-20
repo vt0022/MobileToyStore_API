@@ -1,5 +1,9 @@
 package com.mobileprogramming.mobiletoystore.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.mobileprogramming.mobiletoystore.entity.Order;
+import com.mobileprogramming.mobiletoystore.entity.Product;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +19,8 @@ public class OrderItemModel {
 	
 	private long price;
 	
-	private OrderModel order;
+	@JsonIgnore
+	private Order order;
 	
-	private ProductModel product;
+	private Product product;
 }

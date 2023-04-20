@@ -21,6 +21,8 @@ import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -76,15 +78,15 @@ public class User implements Serializable{
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Timestamp updatedAt;
-	
+
 	// One to one with Cart
 	@OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
 	private Cart cart;
-	
+
 	// One to many with Order
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Order> orders;
-	
+
 	// One to many with Review
 	@OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
 	private List<Review> reviews;

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mobileprogramming.mobiletoystore.entity.Order;
+import com.mobileprogramming.mobiletoystore.entity.User;
 import com.mobileprogramming.mobiletoystore.repository.IOrderRepository;
 import com.mobileprogramming.mobiletoystore.service.IOrderService;
 
@@ -35,6 +36,9 @@ public class OrderServiceImpl implements IOrderService {
 		return orderRepository.count();
 	}
 	
-	
+	@Override
+	public List<Order> findByUser(User user) {
+		return orderRepository.findByUser(user);
+	}
 	
 }

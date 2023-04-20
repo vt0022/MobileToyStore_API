@@ -6,6 +6,7 @@ import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mobileprogramming.mobiletoystore.entity.OrderItem;
 import com.mobileprogramming.mobiletoystore.entity.Product;
 import com.mobileprogramming.mobiletoystore.entity.User;
@@ -34,9 +35,11 @@ public class ReviewModel {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Timestamp updatedAt;
 	
-	private User user;
+	private UserModel user;
 
-	private Product product;	
+	private ProductModel product;	
 	
-	private OrderItem orderItem;
+	
+	@JsonIgnore
+	private OrderItemModel orderItem;
 }

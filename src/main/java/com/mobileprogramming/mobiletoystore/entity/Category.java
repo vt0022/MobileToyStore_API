@@ -35,8 +35,7 @@ public class Category implements Serializable {
 	
 	//@Column
 	private boolean status;
-	
-	@JsonIgnore
+
 	// One to many with Product
 	@OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
 	private List<Product> products;

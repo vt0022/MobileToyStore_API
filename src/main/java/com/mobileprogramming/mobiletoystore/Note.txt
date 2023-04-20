@@ -5,3 +5,4 @@
 Ví dụ: gọi category trong product, mỗi category lại gọi product,...
 -> Nếu dùng Model thì loại bỏ cả 2 bên quan hệ
 -> Nếu dùng Entity thì 1 bên
+-> JsonIgnore cho các List thể hiện mối quan hệ, chú ý Model, tránh bị lặp vô tận

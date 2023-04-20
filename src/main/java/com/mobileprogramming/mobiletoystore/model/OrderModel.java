@@ -13,6 +13,7 @@ import jakarta.validation.constraints.NotNull;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.mobileprogramming.mobiletoystore.entity.OrderItem;
 import com.mobileprogramming.mobiletoystore.entity.User;
 

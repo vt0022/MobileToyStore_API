@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mobileprogramming.mobiletoystore.entity.Order;
 import com.mobileprogramming.mobiletoystore.entity.OrderItem;
+import com.mobileprogramming.mobiletoystore.entity.User;
 import com.mobileprogramming.mobiletoystore.model.CartItemModel;
 import com.mobileprogramming.mobiletoystore.model.CartModel;
 import com.mobileprogramming.mobiletoystore.model.OrderItemModel;
@@ -26,6 +27,7 @@ import com.mobileprogramming.mobiletoystore.model.OrderModel;
 import com.mobileprogramming.mobiletoystore.model.ProductModel;
 import com.mobileprogramming.mobiletoystore.model.UserModel;
 import com.mobileprogramming.mobiletoystore.service.IOrderService;
+import com.mobileprogramming.mobiletoystore.service.IUserService;
 
 @RestController
 @RequestMapping("/toystoreapp/order")
@@ -35,21 +37,35 @@ public class OrderController {
 	IOrderService orderService;
 	
 	@Autowired
+	IUserService userService;
+	
+	@Autowired
 	ModelMapper modelMapper;
 	
-	@GetMapping({"/all"})
-	public ResponseEntity<List<OrderModel>> getAllOrders() {
+	@GetMapping({"", "/all"})
+	public ResponseEntity<?> getAllOrders() {
 		List<Order> orderList = orderService.findAll();
 		// Mapping
 		List<OrderModel> orderModels = modelMapper.map(orderList, new TypeToken<List<OrderModel>>(){}.getType());
 		return new ResponseEntity<>(orderModels, HttpStatus.OK);
 	}
 	
-	@GetMapping("")
-	public ResponseEntity<OrderModel> getOrderByID(@RequestParam int orderID) {
+	@GetMapping("/{orderID}")
+	public ResponseEntity<?> getOrderByID(@PathVariable int orderID) {
 		Optional<Order>order = orderService.findById(orderID);
 		if(order.isPresent()) {
 			OrderModel orderModel = modelMapper.map(order.get(), OrderModel.class);
+			return new ResponseEntity<>(orderModel, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	}
+	
+	@PostMapping(path = "/my", consumes = "application/x-www-form-urlencoded")
+	public ResponseEntity<?> getOrderByUser(@RequestParam(required=true) int userID) {
+		Optional<User> user = userService.findById(userID);
+		if(user.isPresent()) {
+			List<Order>orders = orderService.findByUser(user.get());
+			List<OrderModel> orderModel = modelMapper.map(orders, new TypeToken<List<OrderModel>>() {}.getType());
 			return new ResponseEntity<>(orderModel, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
