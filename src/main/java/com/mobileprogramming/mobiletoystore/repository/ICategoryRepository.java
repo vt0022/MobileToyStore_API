@@ -7,5 +7,5 @@ import com.mobileprogramming.mobiletoystore.entity.Category;
 
 @Repository
 public interface ICategoryRepository extends JpaRepository<Category, Integer>{
-
+	
 }

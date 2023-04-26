@@ -1,5 +1,7 @@
 package com.mobileprogramming.mobiletoystore.model;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,5 +13,7 @@ public class CartModel {
 	
 	private int cartID;
 	
-	private int userID;
+	private UserModel userModel;
+	
+	private List<CartItemModel> cartItemModels;
 }

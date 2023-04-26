@@ -57,4 +57,8 @@ public class Product implements Serializable{
 	// One to many with Review
 	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<Review> reviews; 
+	
+	// One to many with Image
+	@OneToMany(mappedBy = "product", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	private List<Image> imageList; 
 }

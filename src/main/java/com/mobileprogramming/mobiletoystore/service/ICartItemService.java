@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Sort;
 
+import com.mobileprogramming.mobiletoystore.entity.Cart;
 import com.mobileprogramming.mobiletoystore.entity.CartItem;
 
 public interface ICartItemService {
@@ -26,6 +27,10 @@ public interface ICartItemService {
 	<S extends CartItem> S save(S entity);
 
 	List<CartItem> getItemsByCart(int cartID);
+
+	List<CartItem> findByCart(Cart cart);
+
+	boolean existByProduct(int cartID, int productID);
 
 
 

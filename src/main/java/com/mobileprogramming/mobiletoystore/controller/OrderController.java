@@ -47,6 +47,10 @@ public class OrderController {
 		List<Order> orderList = orderService.findAll();
 		// Mapping
 		List<OrderModel> orderModels = modelMapper.map(orderList, new TypeToken<List<OrderModel>>(){}.getType());
+//		for (OrderModel orderModel : orderModels) {
+//			for (OrderItemModel o : orderModel.getOrderItems())
+//				System.out.println(o.getOrderItemID());
+//		}
 		return new ResponseEntity<>(orderModels, HttpStatus.OK);
 	}
 	

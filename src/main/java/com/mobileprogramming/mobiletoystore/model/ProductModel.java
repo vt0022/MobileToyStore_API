@@ -1,5 +1,7 @@
 package com.mobileprogramming.mobiletoystore.model;
 
+import java.util.List;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -29,7 +31,7 @@ public class ProductModel {
 	
 	private String images;
 	
-	private MultipartFile imageFiles;
-	
 	private CategoryModel category;
+	
+	private List<ImageModel> imageModels;
 }

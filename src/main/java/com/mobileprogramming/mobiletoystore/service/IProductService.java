@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Sort;
 
+import com.mobileprogramming.mobiletoystore.entity.Category;
 import com.mobileprogramming.mobiletoystore.entity.Product;
 
 public interface IProductService {
@@ -27,4 +28,5 @@ public interface IProductService {
 
 	List<Product> searchForProducts(String searchString);
 
+	List<Product> findByCategory(Category category); 
 }

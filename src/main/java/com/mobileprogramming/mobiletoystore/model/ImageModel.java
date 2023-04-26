@@ -9,14 +9,14 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CartItemModel {
-
-	private int cartItemID;
+public class ImageModel {
 	
-	private int quantity;
+	private int imageID;
 	
-	private ProductModel productModel;
+	private String imageName;
+	
+	private String url;
 	
 	@JsonIgnore
-	private CartModel cartModel;
+	private ProductModel productModel;
 }

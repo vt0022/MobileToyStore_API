@@ -56,14 +56,14 @@ public class ReviewController {
 	@Autowired
 	IOrderItemService orderItemService;
 	
-	@GetMapping("/all")
+	@GetMapping(value = {"/all", ""})
 	public ResponseEntity<?> listReviews() {
 		List<ReviewModel> reviewModels = reviewService.findAll().stream().map(review -> modelMapper
 				.map(review, ReviewModel.class)).collect(Collectors.toList());
 		return new ResponseEntity<>(reviewModels, HttpStatus.OK);
 	}
 	
-	@GetMapping("/my")
+	@PostMapping(path = "/my", consumes = "application/x-www-form-urlencoded")
 	public ResponseEntity<?> getReviewByUser(@RequestParam int userID) {
 		List<Review> reviews = reviewService.findByUser(userID);
 		List<ReviewModel> reviewModels = modelMapper.map(reviews, new TypeToken<List<ReviewModel>>(){}.getType());

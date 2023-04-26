@@ -22,5 +22,6 @@ public class OrderItemModel {
 	@JsonIgnore
 	private Order order;
 	
+	@JsonIgnore
 	private Product product;
 }

@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.mobileprogramming.mobiletoystore.entity.Category;
 import com.mobileprogramming.mobiletoystore.entity.Product;
 import com.mobileprogramming.mobiletoystore.model.ProductModel;
 import com.mobileprogramming.mobiletoystore.repository.IProductRepository;
@@ -71,5 +72,8 @@ public class ProductServiceImpl implements IProductService {
 		productRepository.deleteAll();
 	}
 	
-	
+	@Override
+	public List<Product> findByCategory(Category category) {
+		return productRepository.findByCategory(category);
+	}
 }

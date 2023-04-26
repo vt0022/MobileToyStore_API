@@ -26,10 +26,12 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.Transformation;
 import com.cloudinary.utils.ObjectUtils;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.mobileprogramming.mobiletoystore.entity.Cart;
 import com.mobileprogramming.mobiletoystore.entity.User;
 import com.mobileprogramming.mobiletoystore.model.MessageModel;
 import com.mobileprogramming.mobiletoystore.model.UserResponseModel;
 import com.mobileprogramming.mobiletoystore.model.UserModel;
+import com.mobileprogramming.mobiletoystore.service.ICartService;
 import com.mobileprogramming.mobiletoystore.service.IUserService;
 import com.mobileprogramming.mobiletoystore.utility.SHA512Hash;
 
@@ -45,6 +47,9 @@ public class UserController {
 
 	@Autowired
 	Cloudinary cloudinary;
+	
+	@Autowired
+	ICartService cartService;
 
 	@GetMapping("/me/{userID}")
 	public ResponseEntity<UserModel> getUserByID(@PathVariable int userID) {
@@ -85,6 +90,13 @@ public class UserController {
 		}
 		// Create a new user
 		User newUser = userService.signup(username, password, firstname, lastname, email, phone);
+		// Create a cart
+		Cart newCart = new Cart();
+		newCart.setUser(newUser);
+		newCart = cartService.save(newCart);
+		// Set cart
+		newUser.setCart(newCart);
+		newUser = userService.save(newUser);
 		// Create a response model
 		UserResponseModel newUserResponse = new UserResponseModel();
 		newUserResponse.setMessage("Sign up successfully.");
@@ -134,7 +146,7 @@ public class UserController {
 			// public_id: a unique identifier that you can assign to each image to help you manage your media assets
 			// Crop image
 			String url = cloudinary.url().publicId(u.get("public_id").toString()).
-					transformation(new Transformation().width(100).height(100).crop("fill")).generate();
+					transformation(new Transformation().width(500).height(500).crop("fill")).generate();
 			// Update image
 			User updatedUser = user.get();
 			updatedUser.setImage(url);

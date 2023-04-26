@@ -1,8 +1,10 @@
 package com.mobileprogramming.mobiletoystore.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -17,8 +19,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mobileprogramming.mobiletoystore.entity.Cart;
+import com.mobileprogramming.mobiletoystore.entity.CartItem;
+import com.mobileprogramming.mobiletoystore.model.CartItemModel;
 import com.mobileprogramming.mobiletoystore.model.CartModel;
 import com.mobileprogramming.mobiletoystore.entity.User;
+import com.mobileprogramming.mobiletoystore.service.ICartItemService;
 import com.mobileprogramming.mobiletoystore.service.ICartService;
 import com.mobileprogramming.mobiletoystore.service.IUserService;
 
@@ -30,6 +35,9 @@ public class CartController {
 	
 	@Autowired
 	IUserService userService;
+	
+	@Autowired
+	ICartItemService cartItemService;
 	
 	@Autowired
 	ModelMapper modelMapper;
@@ -44,8 +52,8 @@ public class CartController {
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	
-	@GetMapping("/mycart")
-	public ResponseEntity<CartModel> getCartByUserID(@RequestParam int userID){
+	@GetMapping(path = "/mycart", consumes = "application/x-www-form-urlencoded")
+	public ResponseEntity<?> getCartByUserID(@RequestParam int userID){
 		Optional<User> user = userService.findById(userID);
 		if(!user.isPresent()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -53,15 +61,22 @@ public class CartController {
 		// Get cart 
 		Optional<Cart> cart = Optional.of(user.get().getCart());
 		if(cart.isPresent()) {
-			CartModel cartModel = modelMapper.map(cart, CartModel.class);
+			//List<CartItem> cartItems = cartItemService.findByCart(cart.get());
+			//List<CartItemModel> cartItemModels = modelMapper.map(cartItems, new TypeToken<List<CartItemModel>>() {}.getType());
+			//return new ResponseEntity<>(cartItemModels, HttpStatus.OK);
+			CartModel cartModel = modelMapper.map(cart.get(), CartModel.class);
 			return new ResponseEntity<>(cartModel, HttpStatus.OK);
 		} else
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	
-	@PostMapping("/create")
-	public ResponseEntity<CartModel> createCart(@RequestBody CartModel cart) {
-		Cart newCart = modelMapper.map(cart, Cart.class);
+	@PostMapping(path = "/create", consumes = "application/x-www-form-urlencoded")
+	public ResponseEntity<?> createCart(@RequestParam int userID) {
+		Optional<User> user = userService.findById(userID);
+		if(!user.isPresent())
+			return ResponseEntity.notFound().build();
+		Cart newCart = new Cart();
+		newCart.setUser(user.get());
 		newCart = cartService.save(newCart);
 		return new ResponseEntity<>(modelMapper.map(newCart, CartModel.class), HttpStatus.CREATED);
 	}
