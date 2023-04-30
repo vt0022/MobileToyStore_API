@@ -46,7 +46,7 @@ public class User implements Serializable{
 
 	private String lastname;
 	
-	private int Gender; // 0 for male; 1 for female; 2 for other
+	private int gender; // 0 for male; 1 for female; 2 for other
 	
 	@Temporal(TemporalType.TIMESTAMP)
 	private Timestamp birthDay;

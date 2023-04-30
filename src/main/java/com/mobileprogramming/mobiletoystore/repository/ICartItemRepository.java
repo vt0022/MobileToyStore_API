@@ -13,8 +13,4 @@ import com.mobileprogramming.mobiletoystore.entity.CartItem;
 public interface ICartItemRepository extends JpaRepository<CartItem, Integer>{
 
 	List<CartItem> findByCart(Cart cart);
-	
-	@Query("SELECT COUNT(ci) > 0 FROM CartItem ci "
-			+ "WHERE ci.cart.cartID = :cartId AND ci.product.productID = :productId")
-	boolean existByProduct(int cartID, int productID);
 }

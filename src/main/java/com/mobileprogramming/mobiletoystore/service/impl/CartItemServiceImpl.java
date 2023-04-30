@@ -76,9 +76,4 @@ public class CartItemServiceImpl implements ICartItemService{
 	public List<CartItem> findByCart(Cart cart) {
 		return cartItemRepository.findByCart(cart);
 	}
-
-	@Override
-	public boolean existByProduct(int cartID, int productID) {
-		return cartItemRepository.existByProduct(cartID, productID);
-	}
 }

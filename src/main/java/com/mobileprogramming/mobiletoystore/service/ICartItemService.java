@@ -29,9 +29,4 @@ public interface ICartItemService {
 	List<CartItem> getItemsByCart(int cartID);
 
 	List<CartItem> findByCart(Cart cart);
-
-	boolean existByProduct(int cartID, int productID);
-
-
-
 }
