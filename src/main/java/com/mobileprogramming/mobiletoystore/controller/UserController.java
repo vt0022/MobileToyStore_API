@@ -53,11 +53,11 @@ public class UserController {
 	ICartService cartService;
 
 	@GetMapping("/me/{userID}")
-	public ResponseEntity<UserModel> getUserByID(@PathVariable int userID) {
+	public ResponseEntity<?> getUserByID(@PathVariable int userID) {
 		Optional<User> user = userService.findById(userID);
 		if (user.isPresent()) {
 			UserModel userModel = modelMapper.map(user.get(), UserModel.class);
-			return new ResponseEntity<UserModel>(userModel, HttpStatus.OK);
+			return new ResponseEntity<>(userModel, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
@@ -65,7 +65,7 @@ public class UserController {
 	@ResponseBody
 	@PostMapping(path = "/login", consumes = "application/x-www-form-urlencoded")
 	public ResponseEntity<?> loginUser(@RequestParam String username, @RequestParam String password) {
-		password = SHA512Hash.encryptThis(password);
+		password = SHA512Hash.encryptThis(password.concat("hihi"));
 		System.out.print(password);
 		Optional<User> user = userService.login(username, password);
 		if (user.isPresent()) {
@@ -76,8 +76,10 @@ public class UserController {
 			userLogin.setData(userModel);
 
 			return new ResponseEntity<>(userLogin, HttpStatus.OK);
+		} else {
+			MessageModel messageModel = new MessageModel("Invalid username or password.");
+			return new ResponseEntity<>(messageModel, HttpStatus.UNAUTHORIZED);
 		}
-		return new ResponseEntity<>(new MessageModel("Invalid username or password."), HttpStatus.NOT_FOUND);
 	}
 
 	@PostMapping(path = "/signup", consumes = "application/x-www-form-urlencoded")

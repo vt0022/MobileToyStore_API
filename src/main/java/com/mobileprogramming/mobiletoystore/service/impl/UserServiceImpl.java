@@ -69,7 +69,7 @@ public class UserServiceImpl implements IUserService{
 			String firstname, String lastname, String email, String phone) {
 		User newUser = new User();
 		newUser.setUsername(username);
-		String hashedPassword = SHA512Hash.encryptThis(password.concat("lookout"));
+		String hashedPassword = SHA512Hash.encryptThis(password.concat("hihi"));
 		newUser.setPassword(hashedPassword);
 		newUser.setFirstname(firstname);
 		newUser.setLastname(lastname);

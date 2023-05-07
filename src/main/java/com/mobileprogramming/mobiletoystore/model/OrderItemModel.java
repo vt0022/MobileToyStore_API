@@ -20,8 +20,8 @@ public class OrderItemModel {
 	private long price;
 	
 	@JsonIgnore
-	private Order order;
+	private OrderModel orderModel;
 	
 	@JsonIgnore
-	private Product product;
+	private ProductModel productModel;
 }

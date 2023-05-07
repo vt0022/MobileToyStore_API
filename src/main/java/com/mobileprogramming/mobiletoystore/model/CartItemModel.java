@@ -15,8 +15,8 @@ public class CartItemModel {
 	
 	private int quantity;
 	
-	private ProductModel productModel;
+	private ProductModel product;
 	
 	@JsonIgnore
-	private CartModel cartModel;
+	private CartModel cart;
 }

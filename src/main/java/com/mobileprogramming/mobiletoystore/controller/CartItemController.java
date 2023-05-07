@@ -14,9 +14,11 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mobileprogramming.mobiletoystore.entity.Cart;
@@ -50,31 +52,6 @@ public class CartItemController {
 
 	@Autowired
 	ModelMapper modelMapper;
-
-//	@GetMapping("")
-//	public ResponseEntity<List<CartItemModel>> getItemOfCart(@PathVariable int userID) {
-//		Optional<User> user = userService.findById(userID);
-//		if(!user.isPresent()) {
-//			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//		}
-//		// Get cart 
-//		Optional<Cart> cart = Optional.of(user.get().getCart());
-//		if(cart.isPresent()) {
-//			List<CartItem> cartItemList = cartItemService.getItemsByCart(cart.get().getCartID());
-//			// Catch null with empty
-//			cartItemList = Optional.ofNullable(cartItemList).orElse(Collections.emptyList());
-//			// Mapping and return
-//			List<CartItemModel> cartItems = modelMapper.map(cartItemList, new TypeToken<List<CartItemModel>>(){}.getType());
-//			return new ResponseEntity<>(cartItems, HttpStatus.OK);
-//		} else {
-//			Cart newCart = new Cart();
-//			newCart = cartService.save(newCart);
-//			// No things in Cart
-//			List<CartItemModel> cartItems = Collections.emptyList();
-//			// Return empty collections
-//			return new ResponseEntity<>(cartItems, HttpStatus.OK);
-//		}
-//	}
 
 	@PostMapping(path = "/add", consumes = "application/x-www-form-urlencoded")
 	public ResponseEntity<?> addItemToCart(@RequestParam int userID, @RequestParam int productID,
@@ -149,16 +126,4 @@ public class CartItemController {
 		return new ResponseEntity<>(cartItemModels, HttpStatus.OK);
 	}
 
-	@DeleteMapping(path = "/delete", consumes = "application/x-www-form-urlencoded")
-	public ResponseEntity<?> deleteItemFromCart(@RequestParam int cartItemID) {
-		Optional<CartItem> cartItem = cartItemService.findById(cartItemID);
-		if (!cartItem.isPresent())
-			return ResponseEntity.badRequest().build();
-		cartItemService.delete(cartItem.get());
-		// Get cart
-		Optional<Cart> cart = cartService.findById(cartItem.get().getCart().getCartID());
-		List<CartItem> cartItems = cartItemService.findByCart(cart.get());
-		List<CartItemModel> cartItemModels = modelMapper.map(cartItems, new TypeToken<List<CartItemModel>>() {}.getType());
-		return new ResponseEntity<>(cartItemModels, HttpStatus.OK);
-	}
 }

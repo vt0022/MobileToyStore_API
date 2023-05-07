@@ -28,7 +28,6 @@ public class OrderModel {
 
 	private int orderID;
 	
-	@NotNull
 	private Timestamp orderedDate;
 	
 	private Timestamp receivedDate;

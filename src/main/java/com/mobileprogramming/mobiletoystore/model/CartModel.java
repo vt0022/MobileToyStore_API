@@ -13,7 +13,7 @@ public class CartModel {
 	
 	private int cartID;
 	
-	private UserModel userModel;
+	private UserModel user;
 	
-	private List<CartItemModel> cartItemModels;
+	private List<CartItemModel> cartItems;
 }

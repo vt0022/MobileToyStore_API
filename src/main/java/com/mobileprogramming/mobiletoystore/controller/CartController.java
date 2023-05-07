@@ -1,11 +1,14 @@
 package com.mobileprogramming.mobiletoystore.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -13,9 +16,12 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mobileprogramming.mobiletoystore.entity.Cart;
+import com.mobileprogramming.mobiletoystore.entity.CartItem;
+import com.mobileprogramming.mobiletoystore.model.CartItemModel;
 import com.mobileprogramming.mobiletoystore.model.CartModel;
 import com.mobileprogramming.mobiletoystore.entity.User;
 import com.mobileprogramming.mobiletoystore.service.ICartItemService;
@@ -38,17 +44,17 @@ public class CartController {
 	ModelMapper modelMapper;
 	
 	@GetMapping("")
-	public ResponseEntity<CartModel> getCartByID(@RequestParam int cartID){
+	public ResponseEntity<?> getCartByID(@RequestParam int cartID){
 		Optional<Cart> cart = cartService.findById(cartID);
 		if(cart.isPresent()) {
-			CartModel cartModel = modelMapper.map(cart, CartModel.class);
+			CartModel cartModel = modelMapper.map(cart.get(), CartModel.class);
 			return new ResponseEntity<>(cartModel, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	
-	@GetMapping(path = "/mycart", consumes = "application/x-www-form-urlencoded")
-	public ResponseEntity<?> getCartByUserID(@RequestParam int userID){
+	@PostMapping(path = "/mycart", consumes = "application/x-www-form-urlencoded")
+	public ResponseEntity<?> getCartByUserID(@RequestParam(value = "userID", required = true) int userID){
 		Optional<User> user = userService.findById(userID);
 		if(!user.isPresent()) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -56,9 +62,6 @@ public class CartController {
 		// Get cart 
 		Optional<Cart> cart = Optional.of(user.get().getCart());
 		if(cart.isPresent()) {
-			//List<CartItem> cartItems = cartItemService.findByCart(cart.get());
-			//List<CartItemModel> cartItemModels = modelMapper.map(cartItems, new TypeToken<List<CartItemModel>>() {}.getType());
-			//return new ResponseEntity<>(cartItemModels, HttpStatus.OK);
 			CartModel cartModel = modelMapper.map(cart.get(), CartModel.class);
 			return new ResponseEntity<>(cartModel, HttpStatus.OK);
 		} else
@@ -76,18 +79,38 @@ public class CartController {
 		return new ResponseEntity<>(modelMapper.map(newCart, CartModel.class), HttpStatus.CREATED);
 	}
 	
-	@PutMapping("/update/{cartID}")
-	public ResponseEntity<CartModel> updateCart(@PathVariable int cartID, @RequestBody CartModel cart) {
-		// Find old cart
-		Optional<Cart> oldCart = cartService.findById(cartID);
-		if(oldCart.isPresent()) {
-			Cart newCart = oldCart.get();
-			// Map from new cart to old cart
-			newCart = modelMapper.map(cart, Cart.class);
-			// Save it and get new one
-			newCart = cartService.save(newCart);
-			return new ResponseEntity<>(modelMapper.map(newCart, CartModel.class), HttpStatus.OK);
+	@ResponseBody
+	@PutMapping("/update")
+	public ResponseEntity<?> updateCart(@RequestBody CartItemModel cartItemModel) {
+		// Find cartitem
+		Optional<CartItem> cartItem = cartItemService.findById(cartItemModel.getCartItemID());
+		// Find user
+		Optional<User> user = userService.findById(cartItem.get().getCart().getUser().getUserID());
+		// Update cartitem
+		if (cartItemModel.getQuantity() == 0) {
+			cartItemService.delete(cartItem.get());
+		} else {
+			cartItem.get().setQuantity(cartItemModel.getQuantity());
+			CartItem thisCartItem = cartItemService.save(cartItem.get());
 		}
-		return new ResponseEntity<>(HttpStatus.OK);
+		Cart myCart = user.get().getCart();
+		// Map to reply
+		CartModel myCartModel = modelMapper.map(myCart, CartModel.class);
+		return new ResponseEntity<>(modelMapper.map(myCartModel, CartModel.class), HttpStatus.OK);
 	}
+	
+	@DeleteMapping(path = "/delete", consumes = "application/x-www-form-urlencoded")
+	public ResponseEntity<?> deleteItemFromCart(@RequestParam int cartItemID) {
+		// Find cartitem
+		Optional<CartItem> cartItem = cartItemService.findById(cartItemID);
+		// Find user
+		Optional<User> user = userService.findById(cartItem.get().getCart().getUser().getUserID());
+		// Delete cartitem
+		cartItemService.delete(cartItem.get());
+		Cart myCart = user.get().getCart();
+		// Map to reply
+		CartModel myCartModel = modelMapper.map(myCart, CartModel.class);
+		return new ResponseEntity<>(modelMapper.map(myCartModel, CartModel.class), HttpStatus.OK);
+	}
+	
 }

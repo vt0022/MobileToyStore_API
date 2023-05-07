@@ -1,8 +1,15 @@
 package com.mobileprogramming.mobiletoystore.controller;
 
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -17,8 +24,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.mobileprogramming.mobiletoystore.entity.Cart;
+import com.mobileprogramming.mobiletoystore.entity.CartItem;
 import com.mobileprogramming.mobiletoystore.entity.Order;
 import com.mobileprogramming.mobiletoystore.entity.OrderItem;
+import com.mobileprogramming.mobiletoystore.entity.Product;
 import com.mobileprogramming.mobiletoystore.entity.User;
 import com.mobileprogramming.mobiletoystore.model.CartItemModel;
 import com.mobileprogramming.mobiletoystore.model.CartModel;
@@ -26,18 +36,37 @@ import com.mobileprogramming.mobiletoystore.model.OrderItemModel;
 import com.mobileprogramming.mobiletoystore.model.OrderModel;
 import com.mobileprogramming.mobiletoystore.model.ProductModel;
 import com.mobileprogramming.mobiletoystore.model.UserModel;
+import com.mobileprogramming.mobiletoystore.service.ICartItemService;
+import com.mobileprogramming.mobiletoystore.service.ICartService;
+import com.mobileprogramming.mobiletoystore.service.IOrderItemService;
 import com.mobileprogramming.mobiletoystore.service.IOrderService;
+import com.mobileprogramming.mobiletoystore.service.IProductService;
 import com.mobileprogramming.mobiletoystore.service.IUserService;
 
 @RestController
 @RequestMapping("/toystoreapp/order")
 public class OrderController {
 	
+    @PersistenceContext
+    private EntityManager entityManager;
+    
 	@Autowired
 	IOrderService orderService;
 	
 	@Autowired
 	IUserService userService;
+	
+	@Autowired
+	IProductService productService;
+	
+	@Autowired
+	ICartService cartService;
+	
+	@Autowired
+	IOrderItemService orderItemService;
+	
+	@Autowired
+	ICartItemService cartItemService;
 	
 	@Autowired
 	ModelMapper modelMapper;
@@ -75,32 +104,55 @@ public class OrderController {
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
 	
-	@PostMapping("/placeOrder")
-	public ResponseEntity<?> placeOrder(@RequestBody OrderModel orderModel) {
+	@PostMapping("/place/{userID}")
+	public ResponseEntity<?> placeOrder(@PathVariable int userID, @RequestBody OrderModel orderModel) {
+		// Get list of cartItem
+		Optional<User> user = userService.findById(userID);
+		List<CartItem> cartItems = user.get().getCart().getCartItems();
 		// Map and save order from request
 		Order newOrder = modelMapper.map(orderModel, Order.class);
-		// Create a list of order items
-		List<OrderItem> orderItems = newOrder.getOrderItems();
-		// Save order from request
 		newOrder.setOrderedDate(new Timestamp(System.currentTimeMillis()));
+		newOrder.setUser(user.get());
+		newOrder = orderService.save(newOrder);
+		// Create a list of order items
+		List<OrderItem> orderItemList = new ArrayList<>();
 		// Set for order item
 		// Remove products with quantity
 		long total = 0;
-		for (OrderItem orderItem : orderItems) {
-			orderItem.setPrice(orderItem.getProduct().getPrice());
+		List<Integer> cartItemIDs = new ArrayList<Integer>();
+		for (int i = 0; i < cartItems.size(); i++) {
+			CartItem cartItem = cartItems.get(i);
+			OrderItem orderItem = new OrderItem();
+			Product product = cartItem.getProduct();
+			orderItem.setPrice(cartItem.getProduct().getPrice());
 			orderItem.setOrder(newOrder);
-			total += orderItem.getProduct().getPrice();
+			orderItem.setQuantity(cartItem.getQuantity());
+			orderItem.setProduct(product);
+			orderItem = orderItemService.save(orderItem);
+			orderItemList.add(orderItem);
+			total += product.getPrice() * cartItem.getQuantity();
 			// Update quantity
-			orderItem.getProduct().setQuantity(orderItem.getProduct().getQuantity() - orderItem.getQuantity());
+			if (orderItem.getProduct().getQuantity() - orderItem.getQuantity() >= 0)
+				product.setQuantity(orderItem.getProduct().getQuantity() - orderItem.getQuantity());
+			// Set status,...
+			product = productService.save(product);
+			cartItemIDs.add(cartItem.getCartItemID());
 		}
+		// Remove cart items
+		Cart mycart = cartService.findByUser(user.get()).get();
+		mycart.setCartItems(null);
+		mycart = cartService.save(mycart);
 		// Set status and total
 		// Shipping fee //
 		newOrder.setTotal(total);
-		newOrder.setOrderItems(orderItems);
+		newOrder.setOrderItems(orderItemList);
 		newOrder = orderService.save(newOrder);
 		// Map
 		OrderModel newOrderModel = modelMapper.map(newOrder, OrderModel.class);
-		return new ResponseEntity<>(newOrderModel, HttpStatus.CREATED);
+		// Delete cart items
+		for (int i : cartItemIDs)
+			cartItemService.deleteById(i);
+		return new ResponseEntity<>(newOrderModel, HttpStatus.OK);
 	}
 
 	@PostMapping("/update_status")

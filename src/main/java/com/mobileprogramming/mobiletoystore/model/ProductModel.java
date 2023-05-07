@@ -2,13 +2,19 @@ package com.mobileprogramming.mobiletoystore.model;
 
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
+
 import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.mobileprogramming.mobiletoystore.entity.CartItem;
 import com.mobileprogramming.mobiletoystore.entity.Category;
+import com.mobileprogramming.mobiletoystore.entity.OrderItem;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -31,7 +37,16 @@ public class ProductModel {
 	
 	private String images;
 	
+	@JsonIgnore
 	private CategoryModel category;
 	
-	private List<ImageModel> imageModels;
+	@JsonIgnore
+	private List<CartItemModel> cartItems;
+	
+	@JsonIgnore
+	private List<OrderItemModel> orderItems;
+	
+	private List<ImageModel> imageList;
+	
+	private List<ReviewModel> reviews;
 }
