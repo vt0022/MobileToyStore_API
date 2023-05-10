@@ -34,7 +34,7 @@ public class Product implements Serializable{
 
 	private String images;
 	
-	private boolean status;
+	private boolean status; // 0 for inactive
 	
 	@Min(0)
 	private int quantity;

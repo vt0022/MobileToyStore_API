@@ -51,6 +51,13 @@ public class ProductController {
 				.map(product -> modelMapper.map(product, ProductModel.class)).collect(Collectors.toList());
 		return new ResponseEntity<>(productModels, HttpStatus.OK);
 	}
+	
+	@GetMapping("/forsale")
+	public ResponseEntity<?> listActiveProducts() {
+		List<ProductModel> productModels = productService.findByStatus(true).stream()
+				.map(product -> modelMapper.map(product, ProductModel.class)).collect(Collectors.toList());
+		return new ResponseEntity<>(productModels, HttpStatus.OK);
+	}
 
 	@GetMapping("/{productID}")
 	public ResponseEntity<?> getProductsByID(@PathVariable int productID) {
@@ -79,8 +86,45 @@ public class ProductController {
 		return new ResponseEntity<>(productModel, HttpStatus.OK);
 	}
 
-	@GetMapping()
+	@GetMapping("/sort")
 	public ResponseEntity<?> getProductsByCategory(@RequestParam(required = false, defaultValue = "0") int categoryID) {
+		if (categoryID == 0) { // check if param empty
+			List<ProductModel> productModels = productService.findAll().stream()
+					.map(product -> modelMapper.map(product, ProductModel.class)).collect(Collectors.toList());
+			return new ResponseEntity<>(productModels, HttpStatus.OK);
+		} else {
+			Optional<Category> category = categoryService.findById(categoryID);
+
+			if (category.isPresent()) {
+				List<Product> products = productService.findByCategory(category.get());
+				List<ProductModel> productModels = modelMapper.map(products, new TypeToken<List<ProductModel>>() {}.getType());
+				return new ResponseEntity<>(productModels, HttpStatus.OK);
+			}
+		}
+		return new ResponseEntity<>(Optional.empty(), HttpStatus.NOT_FOUND);
+	}
+	
+	@GetMapping("/category")
+	public ResponseEntity<?> getActiveProductsByCategory(@RequestParam(required = false, defaultValue = "0") int categoryID) {
+		if (categoryID == 0) { // check if param empty
+			List<ProductModel> productModels = productService.findByStatus(true).stream()
+					.map(product -> modelMapper.map(product, ProductModel.class)).collect(Collectors.toList());
+			return new ResponseEntity<>(productModels, HttpStatus.OK);
+		} else {
+			Optional<Category> category = categoryService.findById(categoryID);
+
+			if (category.isPresent()) {
+				List<Product> products = productService.findByCategoryAndStatus(category.get(), true);
+				List<ProductModel> productModels = modelMapper.map(products, new TypeToken<List<ProductModel>>() {}.getType());
+				return new ResponseEntity<>(productModels, HttpStatus.OK);
+			}
+		}
+		return new ResponseEntity<>(Optional.empty(), HttpStatus.NOT_FOUND);
+	}
+	
+	@GetMapping("/category/sort")
+	public ResponseEntity<?> getActiveProductsByCategoryAndSort(@RequestParam(required = false, defaultValue = "0") int categoryID,
+			@RequestParam String field, @RequestParam String order) {
 		if (categoryID == 0) { // check if param empty
 			List<ProductModel> productModels = productService.findAll().stream()
 					.map(product -> modelMapper.map(product, ProductModel.class)).collect(Collectors.toList());

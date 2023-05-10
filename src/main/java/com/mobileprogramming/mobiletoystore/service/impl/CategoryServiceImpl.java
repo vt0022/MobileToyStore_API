@@ -72,4 +72,11 @@ public class CategoryServiceImpl implements ICategoryService{
 	public void deleteAll() {
 		categoryRepository.deleteAll();
 	}
+
+	@Override
+	public List<Category> findByStatus(boolean status) {
+		return categoryRepository.findByStatus(status);
+	}
+	
+	
 }

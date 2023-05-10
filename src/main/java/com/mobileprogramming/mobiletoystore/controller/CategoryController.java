@@ -40,6 +40,12 @@ public class CategoryController {
 				.map(category, CategoryModel.class)).collect(Collectors.toList());
 	}
 	
+	@GetMapping("/forsale")
+	public List<CategoryModel> listActiveCategories() {
+		return categoryService.findByStatus(true).stream().map(category -> modelMapper
+				.map(category, CategoryModel.class)).collect(Collectors.toList());
+	}
+	
 	@GetMapping("/{categoryID}")
 	public ResponseEntity<CategoryModel> getCategoryByID(@PathVariable int categoryID) {
 		Optional<Category> category = categoryService.findById(categoryID);

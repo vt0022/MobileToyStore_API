@@ -30,4 +30,6 @@ public interface ICategoryService {
 	List<Category> findAll(Sort sort);
 
 	<S extends Category> S save(S entity);
+
+	List<Category> findByStatus(boolean status);
 }

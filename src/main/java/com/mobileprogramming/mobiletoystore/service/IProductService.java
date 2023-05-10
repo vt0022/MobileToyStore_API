@@ -30,4 +30,10 @@ public interface IProductService {
 	List<Product> searchForProducts(String searchString);
 
 	List<Product> findByCategory(Category category);
+
+	List<Product> findByStatus(boolean status);
+
+	List<Product> findByCategoryAndStatus(Category category, boolean status);
+
+	List<Product> findByCategoryAndStatusAndSortAsc(Category category, boolean status, String field);
 }

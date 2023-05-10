@@ -77,4 +77,21 @@ public class ProductServiceImpl implements IProductService {
 	public List<Product> findByCategory(Category category) {
 		return productRepository.findByCategory(category);
 	}
+
+	@Override
+	public List<Product> findByStatus(boolean status) {
+		return productRepository.findByStatus(status);
+	}
+
+	@Override
+	public List<Product> findByCategoryAndStatus(Category category, boolean status) {
+		return productRepository.findByCategoryAndStatus(category, status);
+	}
+
+	@Override
+	public List<Product> findByCategoryAndStatusAndSortAsc(Category category, boolean status, String field) {
+		return productRepository.findByCategoryAndStatusAndSortAsc(category, status, field);
+	}
+	
+	
 }
