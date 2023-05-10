@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.mobileprogramming.mobiletoystore.entity.OrderItem;
+import com.mobileprogramming.mobiletoystore.entity.Review;
 import com.mobileprogramming.mobiletoystore.repository.IOrderItemRepository;
 import com.mobileprogramming.mobiletoystore.service.IOrderItemService;
 
@@ -54,5 +55,12 @@ public class OrderItemServiceImpl implements IOrderItemService{
 	@Override
 	public void deleteAll() {
 		orderItemRepository.deleteAll();
+	}
+
+	@Override
+	public Optional<OrderItem> findByReview(Review review) {
+		return orderItemRepository.findByReview(review);
 	}	
+	
+	
 }

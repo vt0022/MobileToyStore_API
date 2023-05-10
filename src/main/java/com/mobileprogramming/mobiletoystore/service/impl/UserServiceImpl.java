@@ -9,6 +9,7 @@ import org.springframework.data.domain.AfterDomainEventPublication;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import com.mobileprogramming.mobiletoystore.entity.Review;
 import com.mobileprogramming.mobiletoystore.entity.User;
 import com.mobileprogramming.mobiletoystore.repository.IUserRepository;
 import com.mobileprogramming.mobiletoystore.service.IUserService;
@@ -86,5 +87,6 @@ public class UserServiceImpl implements IUserService{
 	@Override
 	public List<User>getUser() {
 		return userRepository.findUser();
-	}
+	}	
+	
 }

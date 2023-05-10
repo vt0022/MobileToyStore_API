@@ -5,6 +5,7 @@ import java.util.Optional;
 
 import org.springframework.data.domain.Sort;
 
+import com.mobileprogramming.mobiletoystore.entity.Review;
 import com.mobileprogramming.mobiletoystore.entity.User;
 
 public interface IUserService {

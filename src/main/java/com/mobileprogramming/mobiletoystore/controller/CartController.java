@@ -21,11 +21,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.mobileprogramming.mobiletoystore.entity.Cart;
 import com.mobileprogramming.mobiletoystore.entity.CartItem;
+import com.mobileprogramming.mobiletoystore.entity.Product;
 import com.mobileprogramming.mobiletoystore.model.CartItemModel;
 import com.mobileprogramming.mobiletoystore.model.CartModel;
 import com.mobileprogramming.mobiletoystore.entity.User;
 import com.mobileprogramming.mobiletoystore.service.ICartItemService;
 import com.mobileprogramming.mobiletoystore.service.ICartService;
+import com.mobileprogramming.mobiletoystore.service.IProductService;
 import com.mobileprogramming.mobiletoystore.service.IUserService;
 
 @RestController
@@ -39,6 +41,9 @@ public class CartController {
 	
 	@Autowired
 	ICartItemService cartItemService;
+	
+	@Autowired
+	IProductService productService;
 	
 	@Autowired
 	ModelMapper modelMapper;
@@ -77,6 +82,45 @@ public class CartController {
 		newCart.setUser(user.get());
 		newCart = cartService.save(newCart);
 		return new ResponseEntity<>(modelMapper.map(newCart, CartModel.class), HttpStatus.CREATED);
+	}
+	
+	@ResponseBody
+	@PostMapping(path = "/add", consumes = "application/x-www-form-urlencoded")
+	public ResponseEntity<?> addToCart(@RequestParam int productID, @RequestParam int quantity, @RequestParam int userID) {
+		// Find product
+		Product product = productService.findById(productID).get();
+		// Find user
+		User user = userService.findById(userID).get();
+		List<CartItem> cartItems = user.getCart().getCartItems();
+		boolean isExisting = false;
+		if (cartItems.isEmpty()) {
+			CartItem newCartItem = new CartItem();
+			newCartItem.setCart(user.getCart());
+			newCartItem.setProduct(product);
+			newCartItem.setQuantity(quantity);
+			newCartItem = cartItemService.save(newCartItem);
+		} else {
+			for (CartItem ci : cartItems) {
+				if (ci.getProduct().equals(product)) {;
+					ci.setQuantity(ci.getQuantity() + quantity);
+					ci = cartItemService.save(ci);
+					isExisting = true;
+					break;
+				}
+			}	
+		}
+		if (!isExisting) {
+			CartItem newCartItem = new CartItem();
+			newCartItem.setCart(user.getCart());
+			newCartItem.setProduct(product);
+			newCartItem.setQuantity(quantity);
+			newCartItem = cartItemService.save(newCartItem);
+		}
+
+		Cart myCart = user.getCart();
+		// Map to reply
+		CartModel myCartModel = modelMapper.map(myCart, CartModel.class);
+		return new ResponseEntity<>(modelMapper.map(myCartModel, CartModel.class), HttpStatus.OK);
 	}
 	
 	@ResponseBody

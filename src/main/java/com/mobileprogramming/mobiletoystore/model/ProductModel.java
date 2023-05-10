@@ -43,7 +43,6 @@ public class ProductModel {
 	@JsonIgnore
 	private List<CartItemModel> cartItems;
 	
-	@JsonIgnore
 	private List<OrderItemModel> orderItems;
 	
 	private List<ImageModel> imageList;

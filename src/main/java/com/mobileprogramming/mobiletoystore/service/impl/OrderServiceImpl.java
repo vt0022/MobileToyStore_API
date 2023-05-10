@@ -37,8 +37,8 @@ public class OrderServiceImpl implements IOrderService {
 	}
 	
 	@Override
-	public List<Order> findByUser(User user) {
-		return orderRepository.findByUser(user);
+	public List<Order> findAllByUserByOrderedDateDesc(User user) {
+		return orderRepository.findAllByUserByOrderedDateDesc(user);
 	}
 	
 }

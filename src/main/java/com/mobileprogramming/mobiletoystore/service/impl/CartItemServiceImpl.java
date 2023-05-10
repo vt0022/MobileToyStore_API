@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import com.mobileprogramming.mobiletoystore.entity.Cart;
 import com.mobileprogramming.mobiletoystore.entity.CartItem;
+import com.mobileprogramming.mobiletoystore.entity.Product;
 import com.mobileprogramming.mobiletoystore.repository.ICartItemRepository;
 import com.mobileprogramming.mobiletoystore.repository.ICartRepository;
 import com.mobileprogramming.mobiletoystore.service.ICartItemService;
@@ -78,4 +79,11 @@ public class CartItemServiceImpl implements ICartItemService{
 	public List<CartItem> findByCart(Cart cart) {
 		return cartItemRepository.findByCart(cart);
 	}
+
+	@Override
+	public Optional<CartItem> findByProduct(Product product) {
+		return cartItemRepository.findByProduct(product);
+	}
+	
+	
 }

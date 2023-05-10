@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.mobileprogramming.mobiletoystore.entity.Category;
 import com.mobileprogramming.mobiletoystore.entity.Product;
+import com.mobileprogramming.mobiletoystore.entity.Review;
 import com.mobileprogramming.mobiletoystore.model.ProductModel;
 import com.mobileprogramming.mobiletoystore.repository.IProductRepository;
 import com.mobileprogramming.mobiletoystore.service.IProductService;

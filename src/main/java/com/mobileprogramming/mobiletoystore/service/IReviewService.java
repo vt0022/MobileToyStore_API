@@ -3,6 +3,7 @@ package com.mobileprogramming.mobiletoystore.service;
 import java.util.List;
 import java.util.Optional;
 
+import com.mobileprogramming.mobiletoystore.entity.Product;
 import com.mobileprogramming.mobiletoystore.entity.Review;
 import com.mobileprogramming.mobiletoystore.entity.User;
 
@@ -17,5 +18,7 @@ public interface IReviewService {
 	<S extends Review> S save(S entity);
 
 	List<Review> findByUser(Integer userID);
+
+	List<Review> findByProduct(Product product);
 
 }

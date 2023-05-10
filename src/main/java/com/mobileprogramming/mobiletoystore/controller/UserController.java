@@ -28,11 +28,16 @@ import com.cloudinary.Transformation;
 import com.cloudinary.utils.ObjectUtils;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.mobileprogramming.mobiletoystore.entity.Cart;
+import com.mobileprogramming.mobiletoystore.entity.OrderItem;
+import com.mobileprogramming.mobiletoystore.entity.Review;
 import com.mobileprogramming.mobiletoystore.entity.User;
 import com.mobileprogramming.mobiletoystore.model.MessageModel;
+import com.mobileprogramming.mobiletoystore.model.ReviewModel;
 import com.mobileprogramming.mobiletoystore.model.UserResponseModel;
 import com.mobileprogramming.mobiletoystore.model.UserModel;
 import com.mobileprogramming.mobiletoystore.service.ICartService;
+import com.mobileprogramming.mobiletoystore.service.IOrderItemService;
+import com.mobileprogramming.mobiletoystore.service.IReviewService;
 import com.mobileprogramming.mobiletoystore.service.IUserService;
 import com.mobileprogramming.mobiletoystore.utility.SHA512Hash;
 
@@ -51,6 +56,12 @@ public class UserController {
 	
 	@Autowired
 	ICartService cartService;
+	
+	@Autowired
+	IReviewService reviewService;
+	
+	@Autowired
+	IOrderItemService orderItemService;
 
 	@GetMapping("/me/{userID}")
 	public ResponseEntity<?> getUserByID(@PathVariable int userID) {
@@ -165,5 +176,21 @@ public class UserController {
 			System.out.println(exception.getMessage());
 		}
 		return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+	}
+	
+	@GetMapping("/review")
+	public ResponseEntity<?> getUserByReview(@RequestParam int reviewID) {
+		Review review = reviewService.findById(reviewID).get();
+		User user = review.getUser();
+		UserModel userModel = modelMapper.map(user, UserModel.class);
+		return new ResponseEntity<>(userModel, HttpStatus.OK);
+	}
+	
+	@GetMapping("/orderitem")
+	public ResponseEntity<?> getReviewByOrderItem(@RequestParam int orderItemID) {
+		OrderItem orderItem = orderItemService.findById(orderItemID).get();
+		User user = orderItem.getOrder().getUser();
+		UserModel userModel = modelMapper.map(user, UserModel.class);
+		return new ResponseEntity<>(userModel, HttpStatus.OK);
 	}
 }

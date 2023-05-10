@@ -40,79 +40,97 @@ import com.mobileprogramming.mobiletoystore.service.impl.ReviewServiceImpl;
 @RestController
 @RequestMapping("/toystoreapp/review")
 public class ReviewController {
-	
+
 	@Autowired
 	ModelMapper modelMapper;
-	
+
 	@Autowired
 	IReviewService reviewService;
-	
+
 	@Autowired
 	IProductService productService;
-	
+
 	@Autowired
 	IUserService userService;
-	
+
 	@Autowired
 	IOrderItemService orderItemService;
-	
-	@GetMapping(value = {"/all", ""})
+
+	@GetMapping("/all")
 	public ResponseEntity<?> listReviews() {
-		List<ReviewModel> reviewModels = reviewService.findAll().stream().map(review -> modelMapper
-				.map(review, ReviewModel.class)).collect(Collectors.toList());
+		List<ReviewModel> reviewModels = reviewService.findAll().stream()
+				.map(review -> modelMapper.map(review, ReviewModel.class)).collect(Collectors.toList());
 		return new ResponseEntity<>(reviewModels, HttpStatus.OK);
 	}
-	
+
 	@PostMapping(path = "/my", consumes = "application/x-www-form-urlencoded")
 	public ResponseEntity<?> getReviewByUser(@RequestParam int userID) {
 		List<Review> reviews = reviewService.findByUser(userID);
-		List<ReviewModel> reviewModels = modelMapper.map(reviews, new TypeToken<List<ReviewModel>>(){}.getType());
+		List<ReviewModel> reviewModels = modelMapper.map(reviews, new TypeToken<List<ReviewModel>>() {
+		}.getType());
 		return new ResponseEntity<>(reviewModels, HttpStatus.OK);
 	}
-	
-	@GetMapping("/my/{reviewID}")
+
+	@GetMapping("/{reviewID}")
 	public ResponseEntity<?> getReviewByID(@PathVariable int reviewID) {
 		Optional<Review> review = reviewService.findById(reviewID);
-		if(review.isPresent()) {
+		if (review.isPresent()) {
 			ReviewModel reviewModel = modelMapper.map(review, ReviewModel.class);
 			return new ResponseEntity<>(reviewModel, HttpStatus.OK);
 		}
-		return new ResponseEntity<>(Optional.empty(), HttpStatus.OK);	
+		return new ResponseEntity<>(Optional.empty(), HttpStatus.OK);
 	}
-	
+
+	@PostMapping(path = "", consumes = "application/x-www-form-urlencoded")
+	public ResponseEntity<?> getReviewByProduct(@RequestParam int productID) {
+		Product product = productService.findById(productID).get();
+		List<Review> reviews = reviewService.findByProduct(product);
+		List<ReviewModel> reviewModels = modelMapper.map(reviews, new TypeToken<List<ReviewModel>>() {
+		}.getType());
+		return new ResponseEntity<>(reviewModels, HttpStatus.OK);
+	}
+
+	@GetMapping("/orderitem")
+	public ResponseEntity<?> getReviewByOrderItem(@RequestParam int orderItemID) {
+		OrderItem orderItem = orderItemService.findById(orderItemID).get();
+		Review review = orderItem.getReview();
+		if (review != null) {
+			ReviewModel reviewModel = modelMapper.map(review, ReviewModel.class);
+			return new ResponseEntity<>(reviewModel, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+
 	@PostMapping("/create")
-	public ResponseEntity<?> reviewProduct(@RequestBody ReviewModel reviewModel, 
-											@RequestParam int orderItemID,
-											@RequestParam int userID,
-											@RequestParam int productID) {
+	public ResponseEntity<?> reviewProduct(@RequestBody ReviewModel reviewModel, @RequestParam int orderItemID,
+			@RequestParam int userID, @RequestParam int productID) {
 		OrderItem orderItem = orderItemService.findById(orderItemID).get();
 		Product product = productService.findById(productID).get();
 		User user = userService.findById(userID).get();
-		
+
 		Review review = modelMapper.map(reviewModel, Review.class);
 		review.setProduct(product);
 		review.setOrderItem(orderItem);
 		review.setUser(user);
 		review.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 		review = reviewService.save(review);
-		
+
 		reviewModel = modelMapper.map(review, ReviewModel.class);
-		return new ResponseEntity<> (reviewModel, HttpStatus.CREATED);
+		return new ResponseEntity<>(reviewModel, HttpStatus.CREATED);
 	}
-	
+
 	@PutMapping("/update")
-	public ResponseEntity<?> updateReview(@RequestParam int reviewID, 
-											@RequestParam int star,
-											@RequestParam String comment,
-											@RequestParam String images) {
+	public ResponseEntity<?> updateReview(@RequestParam int reviewID, @RequestParam int star,
+			@RequestParam String comment, @RequestParam String images) {
 		Review review = reviewService.findById(reviewID).get();
 		review.setStar(star);
 		review.setComment(comment);
 		review.setImages(images);
 		review.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 		review = reviewService.save(review);
-		
+
 		ReviewModel reviewModel = modelMapper.map(review, ReviewModel.class);
-		return new ResponseEntity<> (reviewModel, HttpStatus.CREATED);
+		return new ResponseEntity<>(reviewModel, HttpStatus.CREATED);
 	}
 }

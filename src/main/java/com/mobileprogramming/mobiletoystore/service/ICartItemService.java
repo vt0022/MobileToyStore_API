@@ -7,6 +7,7 @@ import org.springframework.data.domain.Sort;
 
 import com.mobileprogramming.mobiletoystore.entity.Cart;
 import com.mobileprogramming.mobiletoystore.entity.CartItem;
+import com.mobileprogramming.mobiletoystore.entity.Product;
 
 public interface ICartItemService {
 
@@ -29,4 +30,6 @@ public interface ICartItemService {
 	List<CartItem> getItemsByCart(int cartID);
 
 	List<CartItem> findByCart(Cart cart);
+
+	Optional<CartItem> findByProduct(Product product);
 }

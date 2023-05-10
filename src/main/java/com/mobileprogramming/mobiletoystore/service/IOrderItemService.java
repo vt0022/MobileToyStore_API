@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Sort;
 
 import com.mobileprogramming.mobiletoystore.entity.OrderItem;
+import com.mobileprogramming.mobiletoystore.entity.Review;
 
 public interface IOrderItemService {
 
@@ -24,5 +25,7 @@ public interface IOrderItemService {
 	List<OrderItem> findAll(Sort sort);
 
 	<S extends OrderItem> S save(S entity);
+
+	Optional<OrderItem> findByReview(Review review);
 
 }

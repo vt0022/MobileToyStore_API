@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.mobileprogramming.mobiletoystore.entity.Product;
 import com.mobileprogramming.mobiletoystore.entity.Review;
 import com.mobileprogramming.mobiletoystore.entity.User;
 import com.mobileprogramming.mobiletoystore.repository.IReviewRespository;
@@ -42,4 +43,10 @@ public class ReviewServiceImpl implements IReviewService {
 		return reviewRespository.findByUser(userID);
 	}
 
+	@Override
+	public List<Review> findByProduct(Product product) {
+		return reviewRespository.findByProduct(product);
+	}
+
+	
 }

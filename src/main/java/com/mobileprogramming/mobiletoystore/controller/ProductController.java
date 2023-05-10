@@ -16,10 +16,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.mobileprogramming.mobiletoystore.entity.Category;
+import com.mobileprogramming.mobiletoystore.entity.OrderItem;
 import com.mobileprogramming.mobiletoystore.entity.Product;
+import com.mobileprogramming.mobiletoystore.entity.Review;
 import com.mobileprogramming.mobiletoystore.model.ProductModel;
+import com.mobileprogramming.mobiletoystore.model.ReviewModel;
 import com.mobileprogramming.mobiletoystore.service.ICategoryService;
+import com.mobileprogramming.mobiletoystore.service.IOrderItemService;
 import com.mobileprogramming.mobiletoystore.service.IProductService;
+import com.mobileprogramming.mobiletoystore.service.IReviewService;
 
 @RestController
 @RequestMapping("/toystoreapp/product")
@@ -33,6 +38,12 @@ public class ProductController {
 
 	@Autowired
 	ICategoryService categoryService;
+	
+	@Autowired
+	IReviewService reviewService;
+	
+	@Autowired
+	IOrderItemService orderItemService;
 
 	@GetMapping("/all")
 	public ResponseEntity<?> listProducts() {
@@ -50,6 +61,22 @@ public class ProductController {
 			return new ResponseEntity<>(productModel, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(Optional.empty(), HttpStatus.NOT_FOUND);
+	}
+	
+	@GetMapping("/review")
+	public ResponseEntity<?> getProductByReview(@RequestParam int reviewID) {
+		Review review = reviewService.findById(reviewID).get();
+		Product product = review.getProduct();
+		ProductModel productModel = modelMapper.map(product, ProductModel.class);
+		return new ResponseEntity<>(productModel, HttpStatus.OK);
+	}
+	
+	@GetMapping("/orderitem")
+	public ResponseEntity<?> getProductByOrderItem(@RequestParam int orderItemID) {
+		OrderItem orderItem = orderItemService.findById(orderItemID).get();
+		Product product = orderItem.getProduct();
+		ProductModel productModel = modelMapper.map(product, ProductModel.class);
+		return new ResponseEntity<>(productModel, HttpStatus.OK);
 	}
 
 	@GetMapping()

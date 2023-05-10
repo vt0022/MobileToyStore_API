@@ -97,7 +97,7 @@ public class OrderController {
 	public ResponseEntity<?> getOrderByUser(@RequestParam(required=true) int userID) {
 		Optional<User> user = userService.findById(userID);
 		if(user.isPresent()) {
-			List<Order>orders = orderService.findByUser(user.get());
+			List<Order>orders = orderService.findAllByUserByOrderedDateDesc(user.get());
 			List<OrderModel> orderModel = modelMapper.map(orders, new TypeToken<List<OrderModel>>() {}.getType());
 			return new ResponseEntity<>(orderModel, HttpStatus.OK);
 		}

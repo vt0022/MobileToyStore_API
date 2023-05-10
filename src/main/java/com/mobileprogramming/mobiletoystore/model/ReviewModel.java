@@ -36,11 +36,11 @@ public class ReviewModel {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Timestamp updatedAt;
 	
-	@JsonIgnore
 	private UserModel user;
 
 	@JsonIgnore
 	private ProductModel product;	
 	
+	@JsonIgnore
 	private OrderItemModel orderItem;
 }

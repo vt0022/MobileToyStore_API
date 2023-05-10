@@ -19,9 +19,12 @@ public class OrderItemModel {
 	
 	private long price;
 	
-	@JsonIgnore
-	private OrderModel orderModel;
-	
-	@JsonIgnore
-	private ProductModel productModel;
+//	@JsonIgnore
+//	private OrderModel order;
+//	
+//	@JsonIgnore
+//	private ProductModel product;
+//	
+//	@JsonIgnore
+//	private ReviewModel review;
 }

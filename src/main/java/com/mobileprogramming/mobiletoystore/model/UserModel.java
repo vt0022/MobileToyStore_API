@@ -16,6 +16,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonView;
 import com.mobileprogramming.mobiletoystore.entity.Cart;
 import com.mobileprogramming.mobiletoystore.entity.Order;
+import com.mobileprogramming.mobiletoystore.entity.Review;
 import com.mobileprogramming.mobiletoystore.entity.User;
 
 import lombok.AllArgsConstructor;
@@ -70,4 +71,7 @@ public class UserModel {
 
 	@JsonIgnore
 	private List<OrderModel> orders;
+	
+	@JsonIgnore
+	private List<Review> reviews;
 }

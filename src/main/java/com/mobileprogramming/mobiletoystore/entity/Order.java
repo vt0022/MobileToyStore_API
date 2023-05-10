@@ -3,7 +3,10 @@ package com.mobileprogramming.mobiletoystore.entity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.List;
+
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -57,6 +60,6 @@ public class Order implements Serializable{
 	private User user;
 
 	// One to many with OrderItem
-	@OneToMany(mappedBy = "order")
+	@OneToMany(mappedBy = "order", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	private List<OrderItem> orderItems;
 }
