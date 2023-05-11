@@ -103,12 +103,12 @@ public class ReviewController {
 	}
 
 	@PostMapping("/create")
-	public ResponseEntity<?> reviewProduct(@RequestBody ReviewModel reviewModel, @RequestParam int orderItemID,
-			@RequestParam int userID, @RequestParam int productID) {
+	public ResponseEntity<?> reviewProduct(@RequestBody ReviewModel reviewModel, @RequestParam int orderItemID) {
 		OrderItem orderItem = orderItemService.findById(orderItemID).get();
-		Product product = productService.findById(productID).get();
-		User user = userService.findById(userID).get();
-
+		Product product = orderItem.getProduct();
+		User user = orderItem.getOrder().getUser();
+//		if (orderItem.getReview() == null) 
+//			return new ResponseEntity<>(reviewModel, HttpStatus.CREATED);
 		Review review = modelMapper.map(reviewModel, Review.class);
 		review.setProduct(product);
 		review.setOrderItem(orderItem);

@@ -120,8 +120,10 @@ public class UserController {
 		return new ResponseEntity<>(newUserResponse, HttpStatus.OK);
 	}
 
+	@ResponseBody
 	@PutMapping("/update/profile")
 	public ResponseEntity<?> updateProfile(@RequestBody UserModel userModel) {
+//		System.out.println("///////////////////////////////////" + userModel.getUserID());
 		Optional<User> currentUser = userService.findById(userModel.getUserID());
 		if (currentUser.isPresent()) {
 			User updatedUser = currentUser.get();
@@ -134,7 +136,12 @@ public class UserController {
 				return new ResponseEntity<>(new MessageModel("Username has been already taken."), HttpStatus.IM_USED);
 			}
 			// Update
-			updatedUser = modelMapper.map(userModel, User.class);
+			updatedUser.setFirstname(userModel.getFirstname());
+			updatedUser.setLastname(userModel.getLastname());
+			updatedUser.setBirthDay(userModel.getBirthDay());
+			updatedUser.setGender(userModel.getGender());
+			updatedUser.setAddress(userModel.getAddress());
+			updatedUser.setPhone(userModel.getPhone());
 			updatedUser.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 			// Set password again
 			updatedUser.setPassword(currentUser.get().getPassword());

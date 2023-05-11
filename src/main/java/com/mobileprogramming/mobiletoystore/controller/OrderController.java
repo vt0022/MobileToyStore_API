@@ -19,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -155,7 +156,7 @@ public class OrderController {
 		return new ResponseEntity<>(newOrderModel, HttpStatus.OK);
 	}
 
-	@PostMapping("/update_status")
+	@PutMapping("/update/status")
 	public ResponseEntity<?> updateStatus(@RequestParam int orderID, @RequestParam int status) {
 		Optional<Order> order = orderService.findById(orderID);
 		if(order.isPresent()) {
@@ -164,6 +165,8 @@ public class OrderController {
 			// Cancel so return all product
 			if(status == 3)
 				myOrder.setCancelledDate(new Timestamp(System.currentTimeMillis()));
+			else if(status == 2)
+				myOrder.setReceivedDate(new Timestamp(System.currentTimeMillis()));
 			myOrder = orderService.save(myOrder);
 			OrderModel orderModel = modelMapper.map(myOrder, OrderModel.class);
 			return new ResponseEntity<>(orderModel, HttpStatus.OK);
