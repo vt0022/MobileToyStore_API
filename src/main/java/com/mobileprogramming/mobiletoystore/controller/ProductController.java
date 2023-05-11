@@ -1,5 +1,6 @@
 package com.mobileprogramming.mobiletoystore.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,10 +39,10 @@ public class ProductController {
 
 	@Autowired
 	ICategoryService categoryService;
-	
+
 	@Autowired
 	IReviewService reviewService;
-	
+
 	@Autowired
 	IOrderItemService orderItemService;
 
@@ -51,12 +52,93 @@ public class ProductController {
 				.map(product -> modelMapper.map(product, ProductModel.class)).collect(Collectors.toList());
 		return new ResponseEntity<>(productModels, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/forsale")
 	public ResponseEntity<?> listActiveProducts() {
 		List<ProductModel> productModels = productService.findByStatus(true).stream()
 				.map(product -> modelMapper.map(product, ProductModel.class)).collect(Collectors.toList());
 		return new ResponseEntity<>(productModels, HttpStatus.OK);
+	}
+
+	@GetMapping("/forsale/sort")
+	public ResponseEntity<?> getActiveProductsAndSort(@RequestParam int sort) {
+		List<Product> products = new ArrayList<>();
+		switch (sort) {
+		case 1: {
+			products = productService.findByStatusOrderByProductNameAsc(true);
+			break;
+		}
+		case 2: {
+			products = productService.findByStatusOrderByProductNameDesc(true);
+			break;
+		}
+		case 3: {
+			products = productService.findByStatusOrderByPriceAsc(true);
+			break;
+		}
+		case 4: {
+			products = productService.findByStatusOrderByPriceDesc(true);
+			break;
+		}
+		default:
+			products = productService.findByStatus(true);
+			break;
+		}
+		List<ProductModel> productModels = modelMapper.map(products, new TypeToken<List<ProductModel>>() {
+		}.getType());
+		return new ResponseEntity<>(productModels, HttpStatus.OK);
+	}
+
+	@GetMapping("/forsale/category")
+	public ResponseEntity<?> getActiveProductsByCategory(
+			@RequestParam(required = false, defaultValue = "0") int categoryID) {
+		if (categoryID == 0) { // check if param empty
+			List<ProductModel> productModels = productService.findByStatus(true).stream()
+					.map(product -> modelMapper.map(product, ProductModel.class)).collect(Collectors.toList());
+			return new ResponseEntity<>(productModels, HttpStatus.OK);
+		} else {
+			Optional<Category> category = categoryService.findById(categoryID);
+
+			if (category.isPresent()) {
+				List<Product> products = productService.findByCategoryAndStatus(category.get(), true);
+				List<ProductModel> productModels = modelMapper.map(products, new TypeToken<List<ProductModel>>() {
+				}.getType());
+				return new ResponseEntity<>(productModels, HttpStatus.OK);
+			}
+		}
+		return new ResponseEntity<>(Optional.empty(), HttpStatus.NOT_FOUND);
+	}
+
+	@GetMapping("forsale/category/sort")
+	public ResponseEntity<?> getActiveProductsByCategoryAndSort(@RequestParam int categoryID, int sort) {
+		Optional<Category> category = categoryService.findById(categoryID);
+		if (category.isPresent()) {
+			List<Product> products = new ArrayList<>();
+			switch (sort) {
+			case 1: {
+				products = productService.findByCategoryAndStatusOrderByProductNameAsc(category.get(), true);
+				break;
+			}
+			case 2: {
+				products = productService.findByCategoryAndStatusOrderByProductNameDesc(category.get(), true);
+				break;
+			}
+			case 3: {
+				products = productService.findByCategoryAndStatusOrderByPriceAsc(category.get(), true);
+				break;
+			}
+			case 4: {
+				products = productService.findByCategoryAndStatusOrderByPriceDesc(category.get(), true);
+				break;
+			}
+			default:
+				products = productService.findByCategoryAndStatus(category.get(), true);
+				break;
+			}
+			List<ProductModel> productModels = modelMapper.map(products, new TypeToken<List<ProductModel>>() {}.getType());
+			return new ResponseEntity<>(productModels, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(Optional.empty(), HttpStatus.NOT_FOUND);
 	}
 
 	@GetMapping("/{productID}")
@@ -69,7 +151,7 @@ public class ProductController {
 		}
 		return new ResponseEntity<>(Optional.empty(), HttpStatus.NOT_FOUND);
 	}
-	
+
 	@GetMapping("/review")
 	public ResponseEntity<?> getProductByReview(@RequestParam int reviewID) {
 		Review review = reviewService.findById(reviewID).get();
@@ -77,68 +159,13 @@ public class ProductController {
 		ProductModel productModel = modelMapper.map(product, ProductModel.class);
 		return new ResponseEntity<>(productModel, HttpStatus.OK);
 	}
-	
+
 	@GetMapping("/orderitem")
 	public ResponseEntity<?> getProductByOrderItem(@RequestParam int orderItemID) {
 		OrderItem orderItem = orderItemService.findById(orderItemID).get();
 		Product product = orderItem.getProduct();
 		ProductModel productModel = modelMapper.map(product, ProductModel.class);
 		return new ResponseEntity<>(productModel, HttpStatus.OK);
-	}
-
-	@GetMapping("/sort")
-	public ResponseEntity<?> getProductsByCategory(@RequestParam(required = false, defaultValue = "0") int categoryID) {
-		if (categoryID == 0) { // check if param empty
-			List<ProductModel> productModels = productService.findAll().stream()
-					.map(product -> modelMapper.map(product, ProductModel.class)).collect(Collectors.toList());
-			return new ResponseEntity<>(productModels, HttpStatus.OK);
-		} else {
-			Optional<Category> category = categoryService.findById(categoryID);
-
-			if (category.isPresent()) {
-				List<Product> products = productService.findByCategory(category.get());
-				List<ProductModel> productModels = modelMapper.map(products, new TypeToken<List<ProductModel>>() {}.getType());
-				return new ResponseEntity<>(productModels, HttpStatus.OK);
-			}
-		}
-		return new ResponseEntity<>(Optional.empty(), HttpStatus.NOT_FOUND);
-	}
-	
-	@GetMapping("/category")
-	public ResponseEntity<?> getActiveProductsByCategory(@RequestParam(required = false, defaultValue = "0") int categoryID) {
-		if (categoryID == 0) { // check if param empty
-			List<ProductModel> productModels = productService.findByStatus(true).stream()
-					.map(product -> modelMapper.map(product, ProductModel.class)).collect(Collectors.toList());
-			return new ResponseEntity<>(productModels, HttpStatus.OK);
-		} else {
-			Optional<Category> category = categoryService.findById(categoryID);
-
-			if (category.isPresent()) {
-				List<Product> products = productService.findByCategoryAndStatus(category.get(), true);
-				List<ProductModel> productModels = modelMapper.map(products, new TypeToken<List<ProductModel>>() {}.getType());
-				return new ResponseEntity<>(productModels, HttpStatus.OK);
-			}
-		}
-		return new ResponseEntity<>(Optional.empty(), HttpStatus.NOT_FOUND);
-	}
-	
-	@GetMapping("/category/sort")
-	public ResponseEntity<?> getActiveProductsByCategoryAndSort(@RequestParam(required = false, defaultValue = "0") int categoryID,
-			@RequestParam String field, @RequestParam String order) {
-		if (categoryID == 0) { // check if param empty
-			List<ProductModel> productModels = productService.findAll().stream()
-					.map(product -> modelMapper.map(product, ProductModel.class)).collect(Collectors.toList());
-			return new ResponseEntity<>(productModels, HttpStatus.OK);
-		} else {
-			Optional<Category> category = categoryService.findById(categoryID);
-
-			if (category.isPresent()) {
-				List<Product> products = productService.findByCategory(category.get());
-				List<ProductModel> productModels = modelMapper.map(products, new TypeToken<List<ProductModel>>() {}.getType());
-				return new ResponseEntity<>(productModels, HttpStatus.OK);
-			}
-		}
-		return new ResponseEntity<>(Optional.empty(), HttpStatus.NOT_FOUND);
 	}
 
 	@GetMapping("/search")
@@ -149,6 +176,13 @@ public class ProductController {
 		}.getType());
 		return new ResponseEntity<>(gotProducts, HttpStatus.OK);
 	}
-
-	// Update quantity
+	
+	@GetMapping("/search/sort")
+	public ResponseEntity<?> searchForProductsAndSort(
+			@RequestParam(value = "q", required = false, defaultValue = "") String searchString, @RequestParam int sort) {
+		List<Product> foundProducts = productService.searchForProductsAndSort(searchString, sort);
+		List<ProductModel> gotProducts = modelMapper.map(foundProducts, new TypeToken<List<ProductModel>>() {
+		}.getType());
+		return new ResponseEntity<>(gotProducts, HttpStatus.OK);
+	}
 }

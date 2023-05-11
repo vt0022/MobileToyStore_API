@@ -92,7 +92,7 @@ public class CartController {
 		// Find user
 		User user = userService.findById(userID).get();
 		List<CartItem> cartItems = user.getCart().getCartItems();
-		boolean isExisting = false;
+		boolean isExisting = false; 
 		if (cartItems.isEmpty()) {
 			CartItem newCartItem = new CartItem();
 			newCartItem.setCart(user.getCart());
@@ -117,6 +117,7 @@ public class CartController {
 			newCartItem = cartItemService.save(newCartItem);
 		}
 
+		user = userService.findById(userID).get();
 		Cart myCart = user.getCart();
 		// Map to reply
 		CartModel myCartModel = modelMapper.map(myCart, CartModel.class);

@@ -35,5 +35,22 @@ public interface IProductService {
 
 	List<Product> findByCategoryAndStatus(Category category, boolean status);
 
-	List<Product> findByCategoryAndStatusAndSortAsc(Category category, boolean status, String field);
+	List<Product> findByCategoryAndStatusOrderByPriceDesc(Category category, boolean status);
+
+	List<Product> findByCategoryAndStatusOrderByPriceAsc(Category category, boolean status);
+
+	List<Product> findByCategoryAndStatusOrderByProductNameDesc(Category category, boolean status);
+
+	List<Product> findByCategoryAndStatusOrderByProductNameAsc(Category category, boolean status);
+
+	List<Product> findByStatusOrderByPriceDesc(boolean status);
+
+	List<Product> findByStatusOrderByPriceAsc(boolean status);
+
+	List<Product> findByStatusOrderByProductNameDesc(boolean status);
+
+	List<Product> findByStatusOrderByProductNameAsc(boolean status);
+
+	List<Product> searchForProductsAndSort(String searchString, int sort);
+
 }

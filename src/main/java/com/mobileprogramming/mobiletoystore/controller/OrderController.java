@@ -163,8 +163,15 @@ public class OrderController {
 			Order myOrder = order.get();
 			myOrder.setStatus(status);
 			// Cancel so return all product
-			if(status == 3)
+			if(status == 3) {
 				myOrder.setCancelledDate(new Timestamp(System.currentTimeMillis()));
+				List<OrderItem> orderItems = myOrder.getOrderItems();
+				for (OrderItem oi : orderItems) {
+					Product product = oi.getProduct();
+					product.setQuantity(product.getQuantity() + oi.getQuantity());
+					product = productService.save(product);
+				}
+			}
 			else if(status == 2)
 				myOrder.setReceivedDate(new Timestamp(System.currentTimeMillis()));
 			myOrder = orderService.save(myOrder);

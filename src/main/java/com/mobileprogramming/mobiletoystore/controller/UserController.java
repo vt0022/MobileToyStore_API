@@ -2,9 +2,11 @@ package com.mobileprogramming.mobiletoystore.controller;
 
 import java.awt.PageAttributes.MediaType;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.util.Map;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -156,15 +158,19 @@ public class UserController {
 	}
 
 	@PutMapping(path = "/update/image")
-	public ResponseEntity<?> updateProfileImage(@RequestParam int userID, @RequestPart MultipartFile image)
+	public ResponseEntity<?> updateProfileImage(@RequestPart String userID, @RequestPart MultipartFile image)
 			throws IOException {
-		//int ID =  userID;//Integer.parseInt(userID.toString());
-		Optional<User>user = userService.findById(userID);
+	    //String requestBodyString = userID.readString(StandardCharsets.UTF_8);
+	    // int userID = Integer.parseInt(requestBodyString);
+		Optional<User>user = userService.findById(Integer.parseInt(userID));
 		if(!user.isPresent())
 			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 		try {
 			// Upload image
-			Map u = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.asMap("public_id", "profile_" + String.valueOf(userID)));
+			// Without random, it will replace current image
+			// So the url will display image slowly
+			UUID randomUUID = UUID.randomUUID();
+			Map u = cloudinary.uploader().upload(image.getBytes(), ObjectUtils.asMap("public_id", "profile_" + String.valueOf(userID) + "_" + randomUUID));
 			// public_id: a unique identifier that you can assign to each image to help you manage your media assets
 			// Crop image
 			String url = cloudinary.url().publicId(u.get("public_id").toString()).
@@ -175,9 +181,9 @@ public class UserController {
 			updatedUser.setUpdatedAt(new Timestamp(System.currentTimeMillis()));
 			updatedUser = userService.save(updatedUser);
 			// Create response model
-			UserResponseModel usModel = new UserResponseModel();
-			usModel.setMessage("Profile image was updated sucessfully!");
-			usModel.setData(modelMapper.map(updatedUser, UserModel.class));
+			//UserResponseModel usModel = new UserResponseModel();
+			//usModel.setMessage("Profile image was updated sucessfully!");
+			UserModel usModel = modelMapper.map(updatedUser, UserModel.class);
 			return new ResponseEntity<>(usModel, HttpStatus.OK);
 		} catch (IOException exception) {
 			System.out.println(exception.getMessage());

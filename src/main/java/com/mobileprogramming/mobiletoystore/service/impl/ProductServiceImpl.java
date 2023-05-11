@@ -42,7 +42,42 @@ public class ProductServiceImpl implements IProductService {
 	
 	@Override
 	public List<Product>searchForProducts(String searchString) {
-		List<Product> allProducts = productRepository.findAll();
+		List<Product> allProducts = productRepository.findByStatus(true);
+		List<Product> foundProducts = new ArrayList<>();
+		for (Product product : allProducts) {
+			if (product.getProductName().toLowerCase().contains(searchString.toLowerCase())
+					|| product.getDescription().toLowerCase().contains(searchString.toLowerCase())) {
+				foundProducts.add(product);
+			}
+		}
+		return foundProducts;
+	}
+	
+	@Override
+	public List<Product>searchForProductsAndSort(String searchString, int sort) {
+		List<Product> allProducts = new ArrayList<>();
+		switch (sort) {
+		case 1: {
+			allProducts = productRepository.findByStatusOrderByProductNameAsc(true);
+			break;
+		}
+		case 2: {
+			allProducts = productRepository.findByStatusOrderByProductNameDesc(true);
+			break;
+		}
+		case 3: {
+			allProducts = productRepository.findByStatusOrderByPriceAsc(true);
+			break;
+		}
+		case 4: {
+			allProducts = productRepository.findByStatusOrderByPriceDesc(true);
+			break;
+		}
+		default:
+			allProducts = productRepository.findByStatus(true);
+			break;
+		}
+
 		List<Product> foundProducts = new ArrayList<>();
 		for (Product product : allProducts) {
 			if (product.getProductName().toLowerCase().contains(searchString.toLowerCase())
@@ -89,9 +124,42 @@ public class ProductServiceImpl implements IProductService {
 	}
 
 	@Override
-	public List<Product> findByCategoryAndStatusAndSortAsc(Category category, boolean status, String field) {
-		return productRepository.findByCategoryAndStatusAndSortAsc(category, status, field);
+	public List<Product> findByCategoryAndStatusOrderByProductNameAsc(Category category, boolean status) {
+		return productRepository.findByCategoryAndStatusOrderByProductNameAsc(category, status);
 	}
-	
-	
+
+	@Override
+	public List<Product> findByCategoryAndStatusOrderByProductNameDesc(Category category, boolean status) {
+		return productRepository.findByCategoryAndStatusOrderByProductNameDesc(category, status);
+	}
+
+	@Override
+	public List<Product> findByCategoryAndStatusOrderByPriceAsc(Category category, boolean status) {
+		return productRepository.findByCategoryAndStatusOrderByPriceAsc(category, status);
+	}
+
+	@Override
+	public List<Product> findByCategoryAndStatusOrderByPriceDesc(Category category, boolean status) {
+		return productRepository.findByCategoryAndStatusOrderByPriceDesc(category, status);
+	}
+
+	@Override
+	public List<Product> findByStatusOrderByProductNameAsc(boolean status) {
+		return productRepository.findByStatusOrderByProductNameAsc(status);
+	}
+
+	@Override
+	public List<Product> findByStatusOrderByProductNameDesc(boolean status) {
+		return productRepository.findByStatusOrderByProductNameDesc(status);
+	}
+
+	@Override
+	public List<Product> findByStatusOrderByPriceAsc(boolean status) {
+		return productRepository.findByStatusOrderByPriceAsc(status);
+	}
+
+	@Override
+	public List<Product> findByStatusOrderByPriceDesc(boolean status) {
+		return productRepository.findByStatusOrderByPriceDesc(status);
+	}	
 }
