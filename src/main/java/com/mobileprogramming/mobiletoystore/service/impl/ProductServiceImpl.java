@@ -47,8 +47,7 @@ public class ProductServiceImpl implements IProductService {
 		List<Product> allProducts = productRepository.findByStatus(true);
 		List<Product> foundProducts = new ArrayList<>();
 		for (Product product : allProducts) {
-			if (product.getProductName().toLowerCase().contains(searchString.toLowerCase())
-					|| product.getDescription().toLowerCase().contains(searchString.toLowerCase())) {
+			if (product.getProductName().toLowerCase().contains(searchString.toLowerCase())) { //|| product.getDescription().toLowerCase().contains(searchString.toLowerCase())
 				foundProducts.add(product);
 			}
 		}

@@ -92,18 +92,20 @@ public class CartController {
 		// Find user
 		User user = userService.findById(userID).get();
 		List<CartItem> cartItems = user.getCart().getCartItems();
-		boolean isExisting = false; 
+		boolean isExisting = false;
 		if (cartItems.isEmpty()) {
 			CartItem newCartItem = new CartItem();
 			newCartItem.setCart(user.getCart());
 			newCartItem.setProduct(product);
 			newCartItem.setQuantity(quantity);
 			newCartItem = cartItemService.save(newCartItem);
+			isExisting = true;
 		} else {
 			for (CartItem ci : cartItems) {
 				if (ci.getProduct().equals(product)) {;
 					ci.setQuantity(ci.getQuantity() + quantity);
 					ci = cartItemService.save(ci);
+					System.out.println("THISSSSSSSSSSSSSSSSSSSS");
 					isExisting = true;
 					break;
 				}
@@ -115,6 +117,7 @@ public class CartController {
 			newCartItem.setProduct(product);
 			newCartItem.setQuantity(quantity);
 			newCartItem = cartItemService.save(newCartItem);
+			System.out.println("AGAINNNNNNNNNNNNNN");
 		}
 
 		user = userService.findById(userID).get();
