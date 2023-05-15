@@ -1,5 +1,6 @@
 package com.mobileprogramming.mobiletoystore.service;
 
+import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 
@@ -52,5 +53,7 @@ public interface IProductService {
 	List<Product> findByStatusOrderByProductNameAsc(boolean status);
 
 	List<Product> searchForProductsAndSort(String searchString, int sort);
+
+	List<Product> findTop10Products();
 
 }

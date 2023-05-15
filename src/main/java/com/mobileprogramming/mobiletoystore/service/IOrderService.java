@@ -16,5 +16,15 @@ public interface IOrderService {
 
 	<S extends Order> S save(S entity);
 
-	List<Order>findAllByUserByOrderedDateDesc(User user);
+	List<Order>findByUserOrderByOrderedDateDesc(User user);
+
+	List<Order> findByStatusAndDateOrderByOrderedDateDesc(int status, int month, int year);
+
+	List<Order> findByStatusOrderByOrderedDateDesc(int status);
+
+	List<Order> findAllByOrderByOrderedDateDesc();
+
+	List<Order> findByDateOrderByOrderedDateDesc(int month, int year);
+
+	List<Order> findAllDesc();
 }

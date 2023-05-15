@@ -20,6 +20,7 @@ import com.mobileprogramming.mobiletoystore.entity.Category;
 import com.mobileprogramming.mobiletoystore.entity.OrderItem;
 import com.mobileprogramming.mobiletoystore.entity.Product;
 import com.mobileprogramming.mobiletoystore.entity.Review;
+import com.mobileprogramming.mobiletoystore.model.ImageModel;
 import com.mobileprogramming.mobiletoystore.model.ProductModel;
 import com.mobileprogramming.mobiletoystore.model.ReviewModel;
 import com.mobileprogramming.mobiletoystore.service.ICategoryService;
@@ -58,6 +59,18 @@ public class ProductController {
 		List<ProductModel> productModels = productService.findByStatus(true).stream()
 				.map(product -> modelMapper.map(product, ProductModel.class)).collect(Collectors.toList());
 		return new ResponseEntity<>(productModels, HttpStatus.OK);
+	}
+	
+	@GetMapping("/image")
+	public ResponseEntity<?> getImageByProduct(@RequestParam int productID) {
+		Optional<Product> product = productService.findById(productID);
+
+		if (product.isPresent()) {
+			List<ImageModel> imageModels = modelMapper.map(product.get().getImageList(), 
+					new TypeToken<List<ImageModel>>() {}.getType());
+			return new ResponseEntity<>(imageModels, HttpStatus.OK);
+		}
+		return new ResponseEntity<>(Optional.empty(), HttpStatus.NOT_FOUND);
 	}
 
 	@GetMapping("/forsale/sort")
@@ -181,6 +194,14 @@ public class ProductController {
 	public ResponseEntity<?> searchForProductsAndSort(
 			@RequestParam(value = "q", required = false, defaultValue = "") String searchString, @RequestParam int sort) {
 		List<Product> foundProducts = productService.searchForProductsAndSort(searchString, sort);
+		List<ProductModel> gotProducts = modelMapper.map(foundProducts, new TypeToken<List<ProductModel>>() {
+		}.getType());
+		return new ResponseEntity<>(gotProducts, HttpStatus.OK);
+	}
+	
+	@GetMapping("/mostpopular")
+	public ResponseEntity<?> getMostPopular() {
+		List<Product> foundProducts = productService.findTop10Products();
 		List<ProductModel> gotProducts = modelMapper.map(foundProducts, new TypeToken<List<ProductModel>>() {
 		}.getType());
 		return new ResponseEntity<>(gotProducts, HttpStatus.OK);

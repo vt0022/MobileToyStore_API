@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import com.mobileprogramming.mobiletoystore.entity.Order;
@@ -13,6 +14,7 @@ import com.mobileprogramming.mobiletoystore.service.IOrderService;
 
 @Service
 public class OrderServiceImpl implements IOrderService {
+
 	@Autowired
 	IOrderRepository orderRepository;
 
@@ -37,8 +39,34 @@ public class OrderServiceImpl implements IOrderService {
 	}
 	
 	@Override
-	public List<Order> findAllByUserByOrderedDateDesc(User user) {
-		return orderRepository.findAllByUserByOrderedDateDesc(user);
+	public List<Order> findByUserOrderByOrderedDateDesc(User user) {
+		return orderRepository.findByUserOrderByOrderedDateDesc(user);
+	}
+
+	@Override
+	public List<Order> findByStatusOrderByOrderedDateDesc(int status) {
+		return orderRepository.findByStatusOrderByOrderedDateDesc(status);
+	}
+
+	@Override
+	public List<Order> findByStatusAndDateOrderByOrderedDateDesc(int status, int month, int year) {
+		return orderRepository.findByStatusAndDateOrderByOrderedDateDesc(status, month, year);
+	}
+	
+	@Override
+	public List<Order> findAllByOrderByOrderedDateDesc() {
+		return orderRepository.findAllByOrderByOrderedDateDesc();
+	}
+
+	@Override
+	public List<Order> findByDateOrderByOrderedDateDesc(int month, int year) {
+		return orderRepository.findByDateOrderByOrderedDateDesc(month, year);
+	}
+	
+	@Override
+	public List<Order>findAllDesc() {
+		Sort sort = Sort.by(Sort.Direction.DESC, "orderedDate");
+		return orderRepository.findAll(sort);
 	}
 	
 }

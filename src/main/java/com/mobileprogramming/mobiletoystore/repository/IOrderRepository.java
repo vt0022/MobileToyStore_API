@@ -13,5 +13,18 @@ import com.mobileprogramming.mobiletoystore.entity.User;
 public interface IOrderRepository extends JpaRepository<Order, Integer>{
 
 	@Query("SELECT o FROM Order o WHERE o.user = :user ORDER BY o.orderedDate DESC")
-	List<Order> findAllByUserByOrderedDateDesc(User user);
+	List<Order> findByUserOrderByOrderedDateDesc(User user);
+	
+	List<Order> findByStatusOrderByOrderedDateDesc(int status); 
+	
+	List<Order> findAllByOrderByOrderedDateDesc();
+	
+	@Query("SELECT o FROM Order o WHERE FUNCTION('MONTH', o.orderedDate) = :month "
+			+ "AND FUNCTION('YEAR', o.orderedDate) = :year ORDER BY o.orderedDate DESC")
+	List<Order> findByDateOrderByOrderedDateDesc(int month, int year);
+	
+	@Query("SELECT o FROM Order o WHERE o.status = :status "
+			+ "AND FUNCTION('MONTH', o.orderedDate) = :month "
+			+ "AND FUNCTION('YEAR', o.orderedDate) = :year ORDER BY o.orderedDate DESC")
+	List<Order> findByStatusAndDateOrderByOrderedDateDesc(int status, int month, int year); 
 }

@@ -1,10 +1,12 @@
 package com.mobileprogramming.mobiletoystore.service.impl;
 
+import java.awt.print.Pageable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
@@ -161,5 +163,12 @@ public class ProductServiceImpl implements IProductService {
 	@Override
 	public List<Product> findByStatusOrderByPriceDesc(boolean status) {
 		return productRepository.findByStatusOrderByPriceDesc(status);
+	}
+
+	@Override
+	public List<Product> findTop10Products() {
+		return productRepository.findTop10Products().subList(0, 10);
 	}	
+	
+	
 }

@@ -47,36 +47,37 @@ import com.mobileprogramming.mobiletoystore.service.IUserService;
 @RestController
 @RequestMapping("/toystoreapp/order")
 public class OrderController {
-	
-    @PersistenceContext
-    private EntityManager entityManager;
-    
+
+	@PersistenceContext
+	private EntityManager entityManager;
+
 	@Autowired
 	IOrderService orderService;
-	
+
 	@Autowired
 	IUserService userService;
-	
+
 	@Autowired
 	IProductService productService;
-	
+
 	@Autowired
 	ICartService cartService;
-	
+
 	@Autowired
 	IOrderItemService orderItemService;
-	
+
 	@Autowired
 	ICartItemService cartItemService;
-	
+
 	@Autowired
 	ModelMapper modelMapper;
-	
-	@GetMapping({"", "/all"})
+
+	@GetMapping({ "", "/all" })
 	public ResponseEntity<?> getAllOrders() {
 		List<Order> orderList = orderService.findAll();
 		// Mapping
-		List<OrderModel> orderModels = modelMapper.map(orderList, new TypeToken<List<OrderModel>>(){}.getType());
+		List<OrderModel> orderModels = modelMapper.map(orderList, new TypeToken<List<OrderModel>>() {
+		}.getType());
 //		for (OrderModel orderModel : orderModels) {
 //			for (OrderItemModel o : orderModel.getOrderItems())
 //				System.out.println(o.getOrderItemID());
@@ -84,27 +85,41 @@ public class OrderController {
 		return new ResponseEntity<>(orderModels, HttpStatus.OK);
 	}
 	
+	@GetMapping("/desc")
+	public ResponseEntity<?> getAllOrdersDesc() {
+		List<Order> orderList = orderService.findAllDesc();
+		// Mapping
+		List<OrderModel> orderModels = modelMapper.map(orderList, new TypeToken<List<OrderModel>>() {
+		}.getType());
+//		for (OrderModel orderModel : orderModels) {
+//			for (OrderItemModel o : orderModel.getOrderItems())
+//				System.out.println(o.getOrderItemID());
+//		}
+		return new ResponseEntity<>(orderModels, HttpStatus.OK);
+	}
+
 	@GetMapping("/{orderID}")
 	public ResponseEntity<?> getOrderByID(@PathVariable int orderID) {
-		Optional<Order>order = orderService.findById(orderID);
-		if(order.isPresent()) {
+		Optional<Order> order = orderService.findById(orderID);
+		if (order.isPresent()) {
 			OrderModel orderModel = modelMapper.map(order.get(), OrderModel.class);
 			return new ResponseEntity<>(orderModel, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
-	
+
 	@PostMapping(path = "/my", consumes = "application/x-www-form-urlencoded")
-	public ResponseEntity<?> getOrderByUser(@RequestParam(required=true) int userID) {
+	public ResponseEntity<?> getOrderByUser(@RequestParam(required = true) int userID) {
 		Optional<User> user = userService.findById(userID);
-		if(user.isPresent()) {
-			List<Order>orders = orderService.findAllByUserByOrderedDateDesc(user.get());
-			List<OrderModel> orderModel = modelMapper.map(orders, new TypeToken<List<OrderModel>>() {}.getType());
+		if (user.isPresent()) {
+			List<Order> orders = orderService.findByUserOrderByOrderedDateDesc(user.get());
+			List<OrderModel> orderModel = modelMapper.map(orders, new TypeToken<List<OrderModel>>() {
+			}.getType());
 			return new ResponseEntity<>(orderModel, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	}
-	
+
 	@PostMapping("/place/{userID}")
 	public ResponseEntity<?> placeOrder(@PathVariable int userID, @RequestBody OrderModel orderModel) {
 		// Get list of cartItem
@@ -159,11 +174,11 @@ public class OrderController {
 	@PutMapping("/update/status")
 	public ResponseEntity<?> updateStatus(@RequestParam int orderID, @RequestParam int status) {
 		Optional<Order> order = orderService.findById(orderID);
-		if(order.isPresent()) {
+		if (order.isPresent()) {
 			Order myOrder = order.get();
 			myOrder.setStatus(status);
 			// Cancel so return all product
-			if(status == 3) {
+			if (status == 3) {
 				myOrder.setCancelledDate(new Timestamp(System.currentTimeMillis()));
 				List<OrderItem> orderItems = myOrder.getOrderItems();
 				for (OrderItem oi : orderItems) {
@@ -171,13 +186,36 @@ public class OrderController {
 					product.setQuantity(product.getQuantity() + oi.getQuantity());
 					product = productService.save(product);
 				}
-			}
-			else if(status == 2)
+			} else if (status == 2)
 				myOrder.setReceivedDate(new Timestamp(System.currentTimeMillis()));
 			myOrder = orderService.save(myOrder);
 			OrderModel orderModel = modelMapper.map(myOrder, OrderModel.class);
 			return new ResponseEntity<>(orderModel, HttpStatus.OK);
 		}
 		return new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
+	}
+
+	@GetMapping("/status")
+	public ResponseEntity<?> getOrderByStatus(@RequestParam int status) {
+		List<Order> orders = new ArrayList<>();
+		if (status == 0) {
+			orders = orderService.findAllByOrderByOrderedDateDesc();
+		} else if (status != 0) {
+			orders = orderService.findByStatusOrderByOrderedDateDesc(status);
+		}
+		List<OrderModel> orderModel = modelMapper.map(orders, new TypeToken<List<OrderModel>>(){}.getType());
+		return new ResponseEntity<>(orderModel, HttpStatus.OK);
+	}
+	
+	@GetMapping("/status/date")
+	public ResponseEntity<?> getOrderByStatusAndDate(@RequestParam int status, int month, int year) {
+		List<Order> orders = new ArrayList<>();
+		if (status == 0) {
+			orders = orderService.findByDateOrderByOrderedDateDesc(month, year);
+		} else if (status != 0) {
+			orders = orderService.findByStatusAndDateOrderByOrderedDateDesc(status, month, year);
+		}
+		List<OrderModel> orderModel = modelMapper.map(orders, new TypeToken<List<OrderModel>>(){}.getType());
+		return new ResponseEntity<>(orderModel, HttpStatus.OK);
 	}
 }

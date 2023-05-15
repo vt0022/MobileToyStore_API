@@ -1,5 +1,6 @@
 package com.mobileprogramming.mobiletoystore.repository;
 
+import java.awt.print.Pageable;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,4 +38,7 @@ public interface IProductRepository extends JpaRepository<Product, Integer>{
 	List<Product> findByStatusOrderByPriceAsc(boolean status);
 	
 	List<Product> findByStatusOrderByPriceDesc(boolean status);
+	
+	@Query("SELECT p FROM Product p LEFT JOIN p.orderItems oi WHERE p.status = 1 GROUP BY p.productID ORDER BY COUNT(oi) DESC")
+    List<Product> findTop10Products();
 }
