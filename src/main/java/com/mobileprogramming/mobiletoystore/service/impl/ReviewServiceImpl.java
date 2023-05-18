@@ -8,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.mobileprogramming.mobiletoystore.entity.Product;
 import com.mobileprogramming.mobiletoystore.entity.Review;
-import com.mobileprogramming.mobiletoystore.entity.User;
 import com.mobileprogramming.mobiletoystore.repository.IReviewRespository;
 import com.mobileprogramming.mobiletoystore.service.IReviewService;
 
@@ -48,5 +47,13 @@ public class ReviewServiceImpl implements IReviewService {
 		return reviewRespository.findByProduct(product);
 	}
 
-	
+	@Override
+	public List<Review> findByOrderByCreatedAtDesc() {
+		return reviewRespository.findByOrderByCreatedAtDesc();
+	}
+
+	@Override
+	public List<Review> findByStarOrderByCreatedAtDesc(Integer star) {
+		return reviewRespository.findByStarOrderByCreatedAtDesc(star);
+	}
 }

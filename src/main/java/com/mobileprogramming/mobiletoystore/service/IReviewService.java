@@ -21,4 +21,7 @@ public interface IReviewService {
 
 	List<Review> findByProduct(Product product);
 
+    List<Review> findByOrderByCreatedAtDesc();
+
+    List<Review> findByStarOrderByCreatedAtDesc(Integer star);
 }

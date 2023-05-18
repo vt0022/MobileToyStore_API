@@ -38,9 +38,7 @@ public class ReviewModel {
 	
 	private UserModel user;
 
-	@JsonIgnore
 	private ProductModel product;	
-	
-	@JsonIgnore
+
 	private OrderItemModel orderItem;
 }

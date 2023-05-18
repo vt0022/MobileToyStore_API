@@ -218,4 +218,12 @@ public class OrderController {
 		List<OrderModel> orderModel = modelMapper.map(orders, new TypeToken<List<OrderModel>>(){}.getType());
 		return new ResponseEntity<>(orderModel, HttpStatus.OK);
 	}
+
+	@GetMapping("/byorderitem")
+	public ResponseEntity<?> getOrderByOrderItem(@RequestParam int orderItemID) {
+		OrderItem orderItem = orderItemService.findById(orderItemID).get();
+		Order order = orderItem.getOrder();
+		OrderModel orderModel = modelMapper.map(order, OrderModel.class);
+		return new ResponseEntity<>(orderModel, HttpStatus.OK);
+	}
 }

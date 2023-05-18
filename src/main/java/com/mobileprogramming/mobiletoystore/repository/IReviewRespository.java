@@ -17,4 +17,8 @@ public interface IReviewRespository extends JpaRepository<Review, Integer> {
 	List<Review> findByUser(Integer userID);
 	
 	List<Review> findByProduct(Product product);
+
+	List<Review> findByOrderByCreatedAtDesc();
+
+	List<Review> findByStarOrderByCreatedAtDesc(Integer star);
 }

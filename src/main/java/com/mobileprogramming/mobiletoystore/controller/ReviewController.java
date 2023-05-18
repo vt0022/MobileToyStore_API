@@ -133,4 +133,20 @@ public class ReviewController {
 		ReviewModel reviewModel = modelMapper.map(review, ReviewModel.class);
 		return new ResponseEntity<>(reviewModel, HttpStatus.CREATED);
 	}
+
+	@GetMapping("/all/desc")
+	public ResponseEntity<?> getReviewDesc() {
+		List<Review> reviews = reviewService.findByOrderByCreatedAtDesc();
+		List<ReviewModel> reviewModels = modelMapper.map(reviews, new TypeToken<List<ReviewModel>>() {
+		}.getType());
+		return new ResponseEntity<>(reviewModels, HttpStatus.OK);
+	}
+
+	@GetMapping("/bystar")
+	public ResponseEntity<?> getReviewByStar(@RequestParam int star) {
+		List<Review> reviews = reviewService.findByStarOrderByCreatedAtDesc(star);
+		List<ReviewModel> reviewModels = modelMapper.map(reviews, new TypeToken<List<ReviewModel>>() {
+		}.getType());
+		return new ResponseEntity<>(reviewModels, HttpStatus.OK);
+	}
 }
