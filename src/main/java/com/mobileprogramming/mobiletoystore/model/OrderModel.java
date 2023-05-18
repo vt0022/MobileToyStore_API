@@ -33,8 +33,9 @@ public class OrderModel {
 	private Timestamp receivedDate;
 	
 	private Timestamp cancelledDate;
-	
-	private int status; // 0 for pending pay; 1 for delivering; 2 for received; 3 for cancelled
+
+	private int status; // 0 for pending pay; 1 for pending confirm; 2 for pending shipping;
+	// 3 for delivering; 4 for received; 5 for cancelled
 	
 	private String receiverName;
 	

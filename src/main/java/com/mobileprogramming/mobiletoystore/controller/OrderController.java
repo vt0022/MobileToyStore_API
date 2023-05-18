@@ -178,7 +178,7 @@ public class OrderController {
 			Order myOrder = order.get();
 			myOrder.setStatus(status);
 			// Cancel so return all product
-			if (status == 3) {
+			if (status == 5) {
 				myOrder.setCancelledDate(new Timestamp(System.currentTimeMillis()));
 				List<OrderItem> orderItems = myOrder.getOrderItems();
 				for (OrderItem oi : orderItems) {
@@ -186,7 +186,7 @@ public class OrderController {
 					product.setQuantity(product.getQuantity() + oi.getQuantity());
 					product = productService.save(product);
 				}
-			} else if (status == 2)
+			} else if (status == 4)
 				myOrder.setReceivedDate(new Timestamp(System.currentTimeMillis()));
 			myOrder = orderService.save(myOrder);
 			OrderModel orderModel = modelMapper.map(myOrder, OrderModel.class);
@@ -198,9 +198,9 @@ public class OrderController {
 	@GetMapping("/status")
 	public ResponseEntity<?> getOrderByStatus(@RequestParam int status) {
 		List<Order> orders = new ArrayList<>();
-		if (status == 0) {
+		if (status == 6) {
 			orders = orderService.findAllByOrderByOrderedDateDesc();
-		} else if (status != 0) {
+		} else if (status != 6) {
 			orders = orderService.findByStatusOrderByOrderedDateDesc(status);
 		}
 		List<OrderModel> orderModel = modelMapper.map(orders, new TypeToken<List<OrderModel>>(){}.getType());
@@ -210,9 +210,9 @@ public class OrderController {
 	@GetMapping("/status/date")
 	public ResponseEntity<?> getOrderByStatusAndDate(@RequestParam int status, int month, int year) {
 		List<Order> orders = new ArrayList<>();
-		if (status == 0) {
+		if (status == 6) {
 			orders = orderService.findByDateOrderByOrderedDateDesc(month, year);
-		} else if (status != 0) {
+		} else if (status != 6) {
 			orders = orderService.findByStatusAndDateOrderByOrderedDateDesc(status, month, year);
 		}
 		List<OrderModel> orderModel = modelMapper.map(orders, new TypeToken<List<OrderModel>>(){}.getType());

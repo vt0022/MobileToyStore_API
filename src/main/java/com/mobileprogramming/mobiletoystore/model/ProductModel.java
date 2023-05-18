@@ -36,6 +36,8 @@ public class ProductModel {
 	private long price;
 	
 	private String images;
+
+	private boolean status;
 	
 	@JsonIgnore
 	private CategoryModel category;

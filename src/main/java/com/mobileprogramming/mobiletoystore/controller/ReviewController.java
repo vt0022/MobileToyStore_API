@@ -117,7 +117,7 @@ public class ReviewController {
 		review = reviewService.save(review);
 
 		reviewModel = modelMapper.map(review, ReviewModel.class);
-		return new ResponseEntity<>(reviewModel, HttpStatus.CREATED);
+		return new ResponseEntity<>(reviewModel, HttpStatus.OK);
 	}
 
 	@PutMapping("/update")

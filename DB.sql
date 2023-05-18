@@ -2038,51 +2038,51 @@ INSERT INTO CartItem (quantity, cartID, productID) VALUES(3, 11, 53),
  
 --- Order
 INSERT INTO `Order`(orderedDate, receivedDate, cancelledDate, status, receiverName, phone, address, total, userID) VALUES 
-("2021-03-22", "2021-03-28", null, 2, "Hà Nguyễn", "0905028763", "28 Lý Thường Kiệt, Hải Châu, Đà Nẵng", 791000, 1),
+("2021-03-22", "2021-03-28", null, 4, "Hà Nguyễn", "0905028763", "28 Lý Thường Kiệt, Hải Châu, Đà Nẵng", 791000, 1),
 
-("2022-07-23", "2022-07-28", null, 2, "Hà Nguyễn", "0905028763", "28 Lý Thường Kiệt, Hải Châu, Đà Nẵng", 1297000, 1),
+("2022-07-23", "2022-07-28", null, 4, "Hà Nguyễn", "0905028763", "28 Lý Thường Kiệt, Hải Châu, Đà Nẵng", 1297000, 1),
 
-("2022-02-10", "2022-02-10", null, 2, "Vân Trần", "0901357908", "61 Đồng Khởi, Nha Trang, Khánh Hòa", 1179000, 2),
+("2022-02-10", "2022-02-10", null, 4, "Vân Trần", "0901357908", "61 Đồng Khởi, Nha Trang, Khánh Hòa", 1179000, 2),
 
-("2022-09-15", "2022-09-25", null, 2, "Trung Phạm", "0935880164", "54 Trần Hưng Đạo, Hội An, Quảng Nam", 627000, 3),
+("2022-09-15", "2022-09-25", null, 4, "Trung Phạm", "0935880164", "54 Trần Hưng Đạo, Hội An, Quảng Nam", 627000, 3),
 
-("2021-11-06", "2021-11-12", null, 2, "Lương Hùng", "0976116352", "85 Nguyễn Huệ, Vinh, Nghệ An", 2258000, 4),
+("2021-11-06", "2021-11-12", null, 4, "Lương Hùng", "0976116352", "85 Nguyễn Huệ, Vinh, Nghệ An", 2258000, 4),
 
-("2022-10-20", "2022-10-27", null, 2, "Lương Hùng", "0976116352", "85 Nguyễn Huệ, Vinh, Nghệ An", 2522000, 4),
+("2022-10-20", "2022-10-27", null, 4, "Lương Hùng", "0976116352", "85 Nguyễn Huệ, Vinh, Nghệ An", 2522000, 4),
 
-("2022-05-01", null, "2022-05-02", 3, "Nguyễn Thị Hương", "0976116352", "Số 12, ngõ 34, đường Trần Thái Tông, P. Dịch Vọng Hậu, Cầu Giấy, Hà Nội", 3852000, 5),
+("2022-05-01", null, "2022-05-02", 5, "Nguyễn Thị Hương", "0976116352", "Số 12, ngõ 34, đường Trần Thái Tông, P. Dịch Vọng Hậu, Cầu Giấy, Hà Nội", 3852000, 5),
 
-("2022-07-13", "2022-07-15", null, 2, "Phạm Hữu Đông", "0903456789", "Số 456, đường Điện Biên Phủ, P. 22, Q. Bình Thạnh, TP. Hồ Chí Minh", 2601000, 6),
+("2022-07-13", "2022-07-15", null, 4, "Phạm Hữu Đông", "0903456789", "Số 456, đường Điện Biên Phủ, P. 22, Q. Bình Thạnh, TP. Hồ Chí Minh", 2601000, 6),
 
-("2020-06-10", "2020-06-15", null, 2, "Tú Lê", "0397845621", "221, Phạm Văn Đồng, Hiệp Bình Chánh, TP. Thủ Đức, TP. Hồ Chí Minh", 429000, 8),
+("2020-06-10", "2020-06-15", null, 4, "Tú Lê", "0397845621", "221, Phạm Văn Đồng, Hiệp Bình Chánh, TP. Thủ Đức, TP. Hồ Chí Minh", 429000, 8),
 
-("2020-05-10", "2020-05-15", null, 2, "Nguyễn Văn Thuận", "0397252681", "An Lạc 1, Mỹ Hoà, Phù Mỹ, Bình Định", 2296000, 11),
+("2020-05-10", "2020-05-15", null, 4, "Nguyễn Văn Thuận", "0397252681", "An Lạc 1, Mỹ Hoà, Phù Mỹ, Bình Định", 2296000, 11),
 
-("2021-12-15", null, "2021-12-15", 3, "Nguyễn Văn Thuận", "0397252681", "An Lạc 1, Mỹ Hoà, Phù Mỹ, Bình Định", 1764000, 11),
+("2021-12-15", null, "2021-12-15", 5, "Nguyễn Văn Thuận", "0397252681", "An Lạc 1, Mỹ Hoà, Phù Mỹ, Bình Định", 1764000, 11),
 
-("2023-04-29", null, null, 1, "Nguyễn Văn Thuận", "0397252681", "An Lạc 1, Mỹ Hoà, Phù Mỹ, Bình Định", 2086000, 11),
+("2023-04-29", null, null, 3, "Nguyễn Văn Thuận", "0397252681", "An Lạc 1, Mỹ Hoà, Phù Mỹ, Bình Định", 2086000, 11),
 
 ("2020-05-02", null, null, 0, "Nguyễn Văn Thuận", "0397252681", "An Lạc 1, Mỹ Hoà, Phù Mỹ, Bình Định", 505000, 11),
 
-("2023-01-19", "2023-01-23", null, 2, "Lê Minh Hùng", "0987654321", "156/6 Tôn Thất Thuyết, Quận 4, TP.HCM", 2038000, 17),
+("2023-01-19", "2023-01-23", null, 4, "Lê Minh Hùng", "0987654321", "156/6 Tôn Thất Thuyết, Quận 4, TP.HCM", 2038000, 17),
 
-("2023-03-15", "2023-03-18", null, 2, "Minh Đặng", "0918765432", "123 Hoàng Diệu, Quận 3, TP.HCM", 2288000, 18),
+("2023-03-15", "2023-03-18", null, 4, "Minh Đặng", "0918765432", "123 Hoàng Diệu, Quận 3, TP.HCM", 2288000, 18),
 
-("2023-05-10", null, null, 1, "Minh Đặng", "0918765432", "123 Hoàng Diệu, Quận 3, TP.HCM", 7860000, 18),
+("2023-05-10", null, null, 3, "Minh Đặng", "0918765432", "123 Hoàng Diệu, Quận 3, TP.HCM", 7860000, 18),
 
-("2023-04-17", "2023-04-21", null, 2, "Ngô Minh Thu", "0909876543", "789 Phạm Văn Đồng, Quận Thủ Đức, TP.HCM", 1119000, 20),
+("2023-04-17", "2023-04-21", null, 4, "Ngô Minh Thu", "0909876543", "789 Phạm Văn Đồng, Quận Thủ Đức, TP.HCM", 1119000, 20),
 
-("2022-09-14", "2022-09-17", null, 2, "Trịnh Thanh Tuấn", "0987123456", "456 Lê Văn Việt, Quận 9, TP.HCM", 1675000, 21),
+("2022-09-14", "2022-09-17", null, 4, "Trịnh Thanh Tuấn", "0987123456", "456 Lê Văn Việt, Quận 9, TP.HCM", 1675000, 21),
 
-("2022-09-20", "2022-09-24", null, 2, "Trung Nguyễn", "0987654321", "123 Trần Phú, Phường 4, Đà Lạt, Lâm Đồng", 4176000, 22),
+("2022-09-20", "2022-09-24", null, 4, "Trung Nguyễn", "0987654321", "123 Trần Phú, Phường 4, Đà Lạt, Lâm Đồng", 4176000, 22),
 
-("2022-04-11", "2022-04-17", null, 2, "Phan Thanh Thu Huyền", "0987654321", "16 Mai Thúc Loan, Lê Chân, Hải Phòng", 867000, 25),
+("2022-04-11", "2022-04-17", null, 4, "Phan Thanh Thu Huyền", "0987654321", "16 Mai Thúc Loan, Lê Chân, Hải Phòng", 867000, 25),
 
-("2023-04-01", "2023-04-04", null, 2, "Hải Trần", "0901234567", "123 Nguyễn Thái Học, Quận 5, TP.HCM", 2272000, 19),
+("2023-04-01", "2023-04-04", null, 4, "Hải Trần", "0901234567", "123 Nguyễn Thái Học, Quận 5, TP.HCM", 2272000, 19),
 
-("2023-03-04", "2023-03-09", null, 2, "Phạm Thu", "0987654321", "18 Lê Duẩn, Hải Châu, Đà Nẵng", 687000, 25),
+("2023-03-04", "2023-03-09", null, 4, "Phạm Thu", "0987654321", "18 Lê Duẩn, Hải Châu, Đà Nẵng", 687000, 25),
 
-("2023-04-27", "2023-04-24", null, 2, "Đỗ Ngọc Linh", "0987654321", "43 Trần Phú, Lộc Hòa, Bảo Lộc, Lâm Đồng", 4527000, 25);
+("2023-04-27", "2023-04-24", null, 4, "Đỗ Ngọc Linh", "0987654321", "43 Trần Phú, Lộc Hòa, Bảo Lộc, Lâm Đồng", 4527000, 25);
 
 -- Order Item 
 INSERT INTO OrderItem(quantity, price, orderID, productID) VALUES

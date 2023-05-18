@@ -10,11 +10,7 @@ import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.mobileprogramming.mobiletoystore.entity.Category;
 import com.mobileprogramming.mobiletoystore.entity.OrderItem;
@@ -205,5 +201,23 @@ public class ProductController {
 		List<ProductModel> gotProducts = modelMapper.map(foundProducts, new TypeToken<List<ProductModel>>() {
 		}.getType());
 		return new ResponseEntity<>(gotProducts, HttpStatus.OK);
+	}
+
+	@PostMapping("/update/status")
+	public ResponseEntity<?> updateStatus(@RequestParam int productID, @RequestParam boolean status) {
+		Product product = productService.findById(productID).get();
+		product.setStatus(status);
+		product = productService.save(product);
+		ProductModel productModel = modelMapper.map(product, ProductModel.class);
+		return new ResponseEntity<>(productModel, HttpStatus.OK);
+	}
+
+	@PostMapping("/update/quantity")
+	public ResponseEntity<?> updateQuantity(@RequestParam int productID, @RequestParam int quantity) {
+		Product product = productService.findById(productID).get();
+		product.setQuantity(quantity);
+		product = productService.save(product);
+		ProductModel productModel = modelMapper.map(product, ProductModel.class);
+		return new ResponseEntity<>(productModel, HttpStatus.OK);
 	}
 }
