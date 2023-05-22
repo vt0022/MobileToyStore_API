@@ -110,13 +110,14 @@ public class ReviewController {
 
     @PostMapping("/create")
     public ResponseEntity<?> reviewProduct(@RequestPart String orderItemID, @RequestPart String star,
-                                           @Nullable @RequestPart String comment, @Nullable @RequestPart MultipartFile images) {
+                                           @RequestPart String comment, @RequestPart MultipartFile images) {
         Optional<OrderItem> orderItem = orderItemService.findById(Integer.parseInt(orderItemID));
+        float receivedStar = Float.parseFloat(star);
         if (!orderItem.isPresent())
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         try {
             Review review = new Review();
-            review.setStar(Integer.parseInt(star));
+            review.setStar((int)receivedStar);
             review.setComment(comment);
             review.setOrderItem(orderItem.get());
             review.setCreatedAt(new Timestamp(System.currentTimeMillis()));
@@ -147,7 +148,7 @@ public class ReviewController {
 
     @PutMapping("/update")
     public ResponseEntity<?> updateReview(@RequestParam int reviewID, @RequestParam int star,
-                                          @RequestParam String comment, @RequestParam String images) {
+                                          @Nullable @RequestParam String comment, @Nullable @RequestParam String images) {
         Review review = reviewService.findById(reviewID).get();
         review.setStar(star);
         review.setComment(comment);

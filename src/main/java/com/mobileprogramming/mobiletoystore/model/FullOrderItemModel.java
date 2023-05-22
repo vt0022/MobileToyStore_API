@@ -46,4 +46,7 @@ public class FullOrderItemModel {
 	private int userID;
 
 	private String firstname;
+
+	// Order
+	private boolean completed;
 }

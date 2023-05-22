@@ -66,7 +66,8 @@ public class OrderItemController {
                         oi.getPrice(), oi.getProduct().getProductID(), oi.getProduct().getProductName(),
                         oi.getProduct().getImages(), oi.getReview().getReviewID(), oi.getReview().getStar(),
                         oi.getReview().getComment(), oi.getReview().getImages(), oi.getReview().getCreatedAt(), oi.getReview().getUpdatedAt(),
-                        oi.getReview().getUser().getUserID(), oi.getReview().getUser().getFirstname());
+                        oi.getReview().getUser().getUserID(), oi.getReview().getUser().getFirstname(),
+                        order.getStatus() == 4 ? true : false);
                 orderItemModels.add(fullOrderItemModel);
             } else {
                 FullOrderItemModel fullOrderItemModel = new FullOrderItemModel();
@@ -84,7 +85,7 @@ public class OrderItemController {
                 fullOrderItemModel.setUpdatedAt(null);
                 fullOrderItemModel.setUserID(0);
                 fullOrderItemModel.setFirstname(null);
-
+                fullOrderItemModel.setCompleted(order.getStatus() == 4 ? true : false);
                 orderItemModels.add(fullOrderItemModel);
             }
         }
