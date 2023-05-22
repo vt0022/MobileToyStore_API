@@ -3,6 +3,7 @@ package com.mobileprogramming.mobiletoystore.entity;
 import java.io.Serializable;
 import java.sql.Timestamp;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -36,11 +37,13 @@ public class Review implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int reviewID;
 	
-	@NotBlank
+	@NotNull
 	private int star;
-	
+
+	@Nullable
 	private String comment;
 
+	@Nullable
 	private String images;
 	
 	@NotNull
@@ -51,7 +54,7 @@ public class Review implements Serializable{
 	private Timestamp updatedAt;
 	
 	// One to one with User
-	@OneToOne
+	@ManyToOne
 	@JoinColumn(name = "userID")
 	private User user;
 	

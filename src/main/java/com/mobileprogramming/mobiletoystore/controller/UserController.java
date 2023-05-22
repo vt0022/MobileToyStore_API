@@ -8,6 +8,7 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
+import jakarta.validation.Valid;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -96,10 +97,10 @@ public class UserController {
 	}
 
 	@PostMapping(path = "/signup", consumes = "application/x-www-form-urlencoded")
-	public ResponseEntity<?> signupUser(@RequestParam(required = true) String username,
-			@RequestParam(required = true) String password, @RequestParam(required = true) String firstname,
-			@RequestParam String lastname, @RequestParam(required = true) String email,
-			@RequestParam(required = true) String phone) {
+	public ResponseEntity<?> signupUser(@Valid @RequestParam(required = true) String username,
+										@Valid @RequestParam(required = true) String password, @Valid @RequestParam(required = true) String firstname,
+										@Valid @RequestParam String lastname, @Valid @RequestParam(required = true) String email,
+										@Valid @RequestParam(required = true) String phone) {
 		if (userService.checkEmailExists(email)) {
 			return new ResponseEntity<>(new MessageModel("Email has been already registered."), HttpStatus.IM_USED);
 		} else if (userService.checkUsernameExists(username)) {
@@ -124,7 +125,7 @@ public class UserController {
 
 	@ResponseBody
 	@PutMapping("/update/profile")
-	public ResponseEntity<?> updateProfile(@RequestBody UserModel userModel) {
+	public ResponseEntity<?> updateProfile(@Valid @RequestBody UserModel userModel) {
 //		System.out.println("///////////////////////////////////" + userModel.getUserID());
 		Optional<User> currentUser = userService.findById(userModel.getUserID());
 		if (currentUser.isPresent()) {
@@ -158,7 +159,7 @@ public class UserController {
 	}
 
 	@PutMapping(path = "/update/image")
-	public ResponseEntity<?> updateProfileImage(@RequestPart String userID, @RequestPart MultipartFile image)
+	public ResponseEntity<?> updateProfileImage(@Valid @RequestPart String userID, @Valid @RequestPart MultipartFile image)
 			throws IOException {
 	    //String requestBodyString = userID.readString(StandardCharsets.UTF_8);
 	    // int userID = Integer.parseInt(requestBodyString);
